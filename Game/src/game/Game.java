@@ -30,9 +30,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int width = gd.getDisplayMode().getWidth();
-		int height = gd.getDisplayMode().getHeight();
-		
-		
+		int height = gd.getDisplayMode().getHeight();	
 		
 		
 		this.setPreferredSize(new Dimension(width, height));

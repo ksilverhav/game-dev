@@ -3,11 +3,13 @@ package game;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-public class Game extends JFrame implements Runnable {
+public class Game extends JFrame implements Runnable, KeyListener {
 	Board board = new Board(); // Gör ett nytt objekt av JPanel-klasen
 	public boolean running = false;
 
@@ -23,7 +25,7 @@ public class Game extends JFrame implements Runnable {
 		this.setPreferredSize(new Dimension(500, 500));
 		this.setMinimumSize(new Dimension(500, 500));
 		this.setMaximumSize(new Dimension(500, 500));
-
+		this.addKeyListener(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Gör så att JFrame kan
 														// stängas genom att
 														// trycka på kryss
@@ -107,5 +109,25 @@ public class Game extends JFrame implements Runnable {
 		
 		g2.dispose();
 		bs.show();
+	}
+	//Skickar vidare knappytryckningar till JPanel för behandling.
+	@Override
+	public void keyPressed(KeyEvent e) {
+		board.keyPressed(e);
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			System.exit(0);
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		board.keyReleased(e);
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		board.keyTyped(e);
+		
 	}
 }

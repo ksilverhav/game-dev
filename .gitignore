@@ -1,5 +1,4 @@
 *.class
-/res/*
 # Package Files #
 *.jar
 *.war

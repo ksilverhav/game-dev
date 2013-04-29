@@ -3,6 +3,9 @@ package game;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
@@ -22,9 +25,19 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 
 	public Game() {
-		this.setPreferredSize(new Dimension(500, 500));
-		this.setMinimumSize(new Dimension(500, 500));
-		this.setMaximumSize(new Dimension(500, 500));
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		
+		
+		
+		
+		this.setPreferredSize(new Dimension(width, height));
+		this.setMinimumSize(new Dimension(width, height));
+		this.setMaximumSize(new Dimension(width, height));
 		this.addKeyListener(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Gör så att JFrame kan
 														// stängas genom att
@@ -33,7 +46,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		this.pack();
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
-		this.setVisible(true); // Gör JFrame synlig
+		this.setVisible(true); // Gör JFrame synlig		
 
 	}
 

@@ -1,8 +1,11 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
@@ -10,10 +13,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
-import javax.swing.JFrame;
+public class Game extends Frame implements Runnable, KeyListener {
+	/**
+	 * Klassen som ritar ut allt och kör Game-loopen Senast uppdaterad av: Jacob
+	 * Pålsson Senast uppdaterad den: 4/30/2013
+	 */
+	private static final long serialVersionUID = 1L;
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	int SCREENWIDTH = (int) screenSize.getWidth();
+	int SCREENHEIGHT = (int) screenSize.getHeight();
 
-public class Game extends JFrame implements Runnable, KeyListener {
-	Board board = new Board(); // Gör ett nytt objekt av JPanel-klasen
 	public boolean running = false;
 
 	/**
@@ -25,26 +34,24 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 
 	public Game() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		
-		
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		int width = gd.getDisplayMode().getWidth();
-		int height = gd.getDisplayMode().getHeight();	
-		
-		
-		this.setPreferredSize(new Dimension(width, height));
-		this.setMinimumSize(new Dimension(width, height));
-		this.setMaximumSize(new Dimension(width, height));
-		this.addKeyListener(this);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Gör så att JFrame kan
-														// stängas genom att
-														// trycka på kryss
-		this.add(board); // Lägger till en JPanel i denna JFrame
-		this.pack();
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true); // Gör JFrame synlig		
+
+		this.addKeyListener(this); // Lägger till KeyListener så spelet kan
+									// hantera knapptryckningar
+
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment(); // Hämtar
+																						// grafiska
+																						// miljön
+		GraphicsDevice device = env.getDefaultScreenDevice(); //
+		GraphicsConfiguration gc = device.getDefaultConfiguration(); // Hämtar
+																		// grafikkortets
+																		// konfigurationer
+
+		this.setUndecorated(true); // Sätter undecorated så ingen ram finns på
+									// spelet, bara det som ritas syns.
+		this.setIgnoreRepaint(true); // I HAVE NO IDEA WHAT I'M DOING
+		device.setFullScreenWindow(this); // Sätter full screen mode, verkar
+											// sätta rätt upplösning direkt
+											// anpassat efter skärmen
 
 	}
 
@@ -61,6 +68,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 
 	@Override
+	/**
+	 * Nedan kommer en funktion som kör gameloopen, anpassat för 60 UPS
+	 */
 	public void run() {
 		long lastTime = System.nanoTime();
 		double nsPerTick = 1000000000D / 60D;
@@ -95,7 +105,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 			if (System.currentTimeMillis() - lastTimer >= 1000) {
 				lastTimer += 1000;
-				// System.out.println(ups + " ups, " + fps + " fps");
+				System.out.println(ups + " ups, " + fps + " fps");
 				this.setTitle("ups: " + ups + ", fps: " + fps);
 				fps = 0;
 				ups = 0;
@@ -105,40 +115,51 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 
 	public void update() {
-		
+
 	}
+
+	private int p = 0;
 
 	public void render() {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
-			createBufferStrategy(3);
+			this.createBufferStrategy(3);
 			return;
 		}
-		Graphics g = bs.getDrawGraphics();
-		Graphics2D g2 = (Graphics2D) g;
-		
-		
-		g2.dispose();
+
+		Graphics g = bs.getDrawGraphics(); // Hämtar graphics-objekt från
+											// bufferstrategy
+		Graphics2D g2 = (Graphics2D) g; // Konverterar till Graphics2D utifall
+										// anti-aliasing vill användas
+		// Ritar ut en svart bakgrund på skärmen med samma storlek som skärmen
+		g2.setColor(Color.BLACK);
+		g2.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
+
+		// Ritar ut en röd rektangel
+		g2.setColor(Color.RED);
+		g2.drawRect(100, 100, 100 + p, 100 + p);
+		p += 30;
+		// g2.dispose();
 		bs.show();
 	}
-	//Skickar vidare knappytryckningar till JPanel för behandling.
+
+	// Skickar vidare knappytryckningar till JPanel för behandling.
 	@Override
 	public void keyPressed(KeyEvent e) {
-		board.keyPressed(e);
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) // Stänger av spelet om ESC
+													// trycks
 			System.exit(0);
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		board.keyReleased(e);
-		
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		board.keyTyped(e);
-		
+
 	}
 }

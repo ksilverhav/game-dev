@@ -16,11 +16,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
 import player.Player;
+import environment.BaseEnvironment;
 
 
 
@@ -33,7 +35,7 @@ public class Game implements Runnable, KeyListener {
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	int SCREENWIDTH = (int) screenSize.getWidth();
 	int SCREENHEIGHT = (int) screenSize.getHeight();
-	
+	ArrayList<BaseEnvironment> environment = new ArrayList<BaseEnvironment>();
 	Player player = new Player();
 	
 	public boolean running = false;
@@ -49,7 +51,8 @@ public class Game implements Runnable, KeyListener {
 	Canvas canvas = new Canvas();
 	int i=0;
 	public Game() {
-
+		environment.add(new BaseEnvironment());
+		player.setEnvironment(environment);
 
 	}
 	
@@ -230,7 +233,7 @@ public class Game implements Runnable, KeyListener {
 	        
 	        
 	        
-	    	if(ups <=60)
+	    	if(ups <=100)
 	    	{
 	    		
 	    		update();

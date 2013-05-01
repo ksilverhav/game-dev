@@ -9,85 +9,98 @@ import java.util.ArrayList;
 import environment.BaseEnvironment;
 
 public class Player {
-	private int X = 0;	//Spelarens X-position
-	private int Y = 0;	//Spelarens Y-position
+	private int X = 0; // Spelarens X-position
+	private int Y = 0; // Spelarens Y-position
 	private int WIDTH = 25;
 	private int HEIGHT = 25;
-	private int X_DIRECTION=0; // Variabel som säger åt vilket håll i x-led spelaren är på väg.
-	private int Y_DIRECTION=0; // Variabel som säger åt vilket håll i x-led spelaren är på väg.
-	private double YSPEED=2;	//Hastighet i Y-led
-	private double XSPEED=2;	//Hastighet i X-led
+	private int X_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
+									// spelaren är på väg.
+	private int Y_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
+									// spelaren är på väg.
+	private double YSPEED = 2; // Hastighet i Y-led
+	private double XSPEED = 2; // Hastighet i X-led
 	private Rectangle HITBOX;;
-	private final double GRAVITY=0.5;	//Konstant gravitation
-	private final double JUMPHEIGHT=-10;
+	private final double GRAVITY = 1; // Konstant gravitation
+	private final double JUMPHEIGHT = -10;	//Höjden på ett hopp
 	private ArrayList<BaseEnvironment> environment;
-	
-	public Player(){
-		HITBOX = new Rectangle(X,Y,WIDTH,HEIGHT);
+
+	public Player() {
+		HITBOX = new Rectangle(X, Y, WIDTH, HEIGHT); //Sätter hitboxen
 	}
-	public void move(){
-		boolean intersected=false;
-		YSPEED+=GRAVITY;	//Ökar hastigheten i Y-led beroende på gravitation
-		X += X_DIRECTION*XSPEED;	//Förflyttar i X-led om knapp är nedtryckt
-		for(int i=0; i<environment.size();i++)
-		{
-			for(int dy = 0; dy<(int)YSPEED;dy++)
-			{
-				HITBOX.setLocation(X, Y+dy);
-			if(HITBOX.intersects(environment.get(i).getHitbox()))
-			{
-				intersected = true;
-			YSPEED = dy;
+
+	public void move() {
+		boolean intersected = false;
+		YSPEED += GRAVITY; // Ökar hastigheten i Y-led beroende på gravitation
+		if(YSPEED > 20)
+			YSPEED = 20;
+		X += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är nedtryckt
+		for (int i = 0; i < environment.size(); i++) { // Loopar igenom all
+														// environment
+			if ((new Rectangle(HITBOX.x, HITBOX.y + (int) YSPEED, HITBOX.width,
+			// Testar om spelaren kommer krocka med något i sin nästa
+			// förflyttning
+					HITBOX.height)).intersects(environment.get(i).getHitbox())) {
+				// Flyttar spelaren till sista pixeln som inte spelaren krockar
+				// med ett föremål
+				for (int dy = 0; dy < (int) YSPEED; dy++) {
+					HITBOX.setLocation(X, Y + dy);
+					if (HITBOX.intersects(environment.get(i).getHitbox())) {
+						intersected = true; // Om spelaren krockar med något
+											// sätts denna till true
+						YSPEED = dy; // Sätter speed till den högsta hastigheten
+										// tillåten för att nästa förflyttning
+										// inte ska krocka med något.
+					}
+				}
+				if (intersected)
+					break;
 			}
-			}
-			if(intersected)
-				break;
 		}
-		Y += YSPEED;	//Ökar position i Y-led
-		if(intersected)	//Stannar vid "golvet" på 500 px
+		Y += YSPEED; // Ökar position i Y-led
+		
+		if (intersected) // Stannar vid "golvet" på 500 px
 		{
-			Y_DIRECTION=-1;	//Sätter direction så spelaren hoppar
-			YSPEED=0;	//Sätter hastigheten till noll
+			Y_DIRECTION = -1; // Sätter direction så spelaren hoppar
+			YSPEED = 0; // Sätter hastigheten till noll
 		}
 
-			
-		
-		HITBOX.setRect(X, Y, WIDTH, HEIGHT);	//Uppdaterar HITBOX
-		
-		
+		HITBOX.setRect(X, Y, WIDTH, HEIGHT); // Uppdaterar HITBOX
+
 	}
-	//Ritar ut spelaren
-	public void paint(Graphics2D g)
-	{
+
+	// Ritar ut spelaren
+	public void paint(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.fillRect(X, Y, WIDTH, HEIGHT);
 	}
-	//Tar hand om knapptryckningar
+
+	// Tar hand om knapptryckningar
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode()==KeyEvent.VK_D)
-			X_DIRECTION = 1;	// Sätter förflyttning i positiv riktning
-		if (e.getKeyCode()==KeyEvent.VK_A)
-			X_DIRECTION = -1;	// Sätter förflyttning i negativ riktning
-		if (e.getKeyCode()==KeyEvent.VK_W)
-		{
-			if(Y_DIRECTION == -1)
-				YSPEED = JUMPHEIGHT;	//spelaren hoppar
-			Y_DIRECTION = 0;	//Sätter Y_DIRECTION till 0 så spelaren inte kan hoppa förän han träffar backen igen.
+		if (e.getKeyCode() == KeyEvent.VK_D)
+			X_DIRECTION = 1; // Sätter förflyttning i positiv riktning
+		if (e.getKeyCode() == KeyEvent.VK_A)
+			X_DIRECTION = -1; // Sätter förflyttning i negativ riktning
+		if (e.getKeyCode() == KeyEvent.VK_W) {
+			if (Y_DIRECTION == -1)
+				YSPEED = JUMPHEIGHT; // spelaren hoppar
+			Y_DIRECTION = 0; // Sätter Y_DIRECTION till 0 så spelaren inte kan
+								// hoppa förän han träffar backen igen.
 		}
-		
-		
+
 	}
+
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode()==KeyEvent.VK_D && X_DIRECTION == 1)
+		if (e.getKeyCode() == KeyEvent.VK_D && X_DIRECTION == 1)
 			X_DIRECTION = 0;
-		if (e.getKeyCode()==KeyEvent.VK_A && X_DIRECTION == -1)
-			X_DIRECTION = 0;	
-		if(e.getKeyCode()==KeyEvent.VK_W && YSPEED < 0)
-			YSPEED=0;	// Stannar gubben om hoppknappen släpps
-		
+		if (e.getKeyCode() == KeyEvent.VK_A && X_DIRECTION == -1)
+			X_DIRECTION = 0;
+		if (e.getKeyCode() == KeyEvent.VK_W && YSPEED < 0)
+			YSPEED = 0; // Stannar gubben om hoppknappen släpps
+
 	}
+
 	public void setEnvironment(ArrayList<BaseEnvironment> ENVIRONMENT) {
-		environment = ENVIRONMENT;
-		
+		environment = ENVIRONMENT;	//Sparar all environment
+
 	}
 }

@@ -2,9 +2,22 @@ package environment;
 
 import java.awt.Rectangle;
 
-public class BaseEnvironment {
-	public Rectangle getHitbox()
-	{
-		return new Rectangle(0,500,600,600);
+public abstract class BaseEnvironment extends Rectangle {
+	
+	public BaseEnvironment(int x, int y, int width, int height){
+		this.setBounds(x, y, width, height);
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
 	}
+	
+	public Rectangle getHitbox(){
+		return this;
+	}
+	
+	protected abstract void render();
+	
+	protected abstract int damager();
+	
 }

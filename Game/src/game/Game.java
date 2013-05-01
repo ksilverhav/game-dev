@@ -13,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
+import player.Player;
+
 public class Game extends Frame implements Runnable, KeyListener {
 	/**
 	 * Klassen som ritar ut allt och kör Game-loopen Senast uppdaterad av: Jacob
@@ -22,7 +24,7 @@ public class Game extends Frame implements Runnable, KeyListener {
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	int SCREENWIDTH = (int) screenSize.getWidth();
 	int SCREENHEIGHT = (int) screenSize.getHeight();
-
+	private Player player = new Player();
 	public boolean running = false;
 
 	/**
@@ -115,15 +117,15 @@ public class Game extends Frame implements Runnable, KeyListener {
 	}
 
 	public void update() {
-
+		player.move();
 	}
-
-	private int p = 0;
-
+	BufferStrategy bs = getBufferStrategy();
 	public void render() {
-		BufferStrategy bs = getBufferStrategy();
+		
 		if (bs == null) {
+			
 			this.createBufferStrategy(3);
+			bs = getBufferStrategy();
 			return;
 		}
 
@@ -135,10 +137,8 @@ public class Game extends Frame implements Runnable, KeyListener {
 		g2.setColor(Color.BLACK);
 		g2.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
 
-		// Ritar ut en röd rektangel
-		g2.setColor(Color.RED);
-		g2.drawRect(100, 100, 100 + p, 100 + p);
-		p += 30;
+	
+		player.paint(g2);
 		// g2.dispose();
 		bs.show();
 	}
@@ -146,7 +146,7 @@ public class Game extends Frame implements Runnable, KeyListener {
 	// Skickar vidare knappytryckningar till JPanel för behandling.
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		player.keyPressed(e);
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) // Stänger av spelet om ESC
 													// trycks
 			System.exit(0);
@@ -155,7 +155,7 @@ public class Game extends Frame implements Runnable, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		player.keyReleased(e);
 	}
 
 	@Override

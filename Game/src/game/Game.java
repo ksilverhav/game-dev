@@ -23,6 +23,7 @@ import javax.swing.JFrame;
 
 import player.Player;
 import environment.BaseEnvironment;
+import environment.StandardFloor;
 
 
 
@@ -51,7 +52,7 @@ public class Game implements Runnable, KeyListener {
 	Canvas canvas = new Canvas();
 	int i=0;
 	public Game() {
-		environment.add(new BaseEnvironment());
+		environment.add(new StandardFloor(0, 500, 1000, 50));
 		player.setEnvironment(environment);
 
 	}

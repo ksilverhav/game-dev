@@ -1,9 +1,15 @@
 package environment;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 public abstract class BaseEnvironment extends Rectangle {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public BaseEnvironment(int x, int y, int width, int height){
 		this.setBounds(x, y, width, height);
 		this.x = x;
@@ -16,7 +22,7 @@ public abstract class BaseEnvironment extends Rectangle {
 		return this;
 	}
 	
-	protected abstract void render();
+	public abstract void render(Graphics2D g);
 	
 	protected abstract int damager();
 	

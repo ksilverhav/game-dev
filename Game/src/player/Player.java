@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.util.List;
 
 import environment.BaseEnvironment;
 
@@ -22,13 +22,13 @@ public class Player {
 	private Rectangle HITBOX;;
 	private final double GRAVITY = 1; // Konstant gravitation
 	private final double JUMPHEIGHT = -10;	//Höjden på ett hopp
-	private ArrayList<BaseEnvironment> environment;
+
 
 	public Player() {
 		HITBOX = new Rectangle(X, Y, WIDTH, HEIGHT); //Sätter hitboxen
 	}
 
-	public void move() {
+	public void move(List<BaseEnvironment> environment) {
 		boolean intersected = false;
 		YSPEED += GRAVITY; // Ökar hastigheten i Y-led beroende på gravitation
 		if(YSPEED > 20)
@@ -99,8 +99,5 @@ public class Player {
 
 	}
 
-	public void setEnvironment(ArrayList<BaseEnvironment> ENVIRONMENT) {
-		environment = ENVIRONMENT;	//Sparar all environment
 
-	}
 }

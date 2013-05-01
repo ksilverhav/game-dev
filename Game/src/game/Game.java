@@ -17,6 +17,8 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -36,7 +38,7 @@ public class Game implements Runnable, KeyListener {
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	int SCREENWIDTH = (int) screenSize.getWidth();
 	int SCREENHEIGHT = (int) screenSize.getHeight();
-	ArrayList<BaseEnvironment> environment = new ArrayList<BaseEnvironment>();
+	List<BaseEnvironment> environment =  Collections.synchronizedList(new ArrayList<BaseEnvironment>());
 	Player player = new Player();
 	
 	public boolean running = false;
@@ -53,7 +55,6 @@ public class Game implements Runnable, KeyListener {
 	int i=0;
 	public Game() {
 		environment.add(new StandardFloor(0, 500, 1000, 50));
-		player.setEnvironment(environment);
 
 	}
 	
@@ -220,9 +221,10 @@ public class Game implements Runnable, KeyListener {
 	        // draw some rectangles...
 
 	        
-	        player.paint(g2d);
+	        render(g2d);
+	        
 	                                
-
+	        
 	        // display frames per second...
 
 	        g2d.setFont( new Font( "Courier New", Font.PLAIN, 12 ) );
@@ -284,12 +286,14 @@ public class Game implements Runnable, KeyListener {
 	}
 
 	public void update() {
-		player.move();
+		player.move(environment);
         
 	}
 	
-	public void render() {
-		
+	public void render(Graphics2D g2d) {
+		player.paint(g2d);
+		for(int i = 0; i < environment.size(); i++ )
+			environment.get(i).render(g2d);
 	
 	}
 

@@ -31,16 +31,26 @@ public class Player {
 		X += X_DIRECTION*XSPEED;	//Förflyttar i X-led om knapp är nedtryckt
 		for(int i=0; i<environment.size();i++)
 		{
-			if((new Rectangle(HITBOX.x, HITBOX.y+(int)YSPEED, HITBOX.width, HITBOX.height)).intersects(environment.get(i).getHitbox()))
+			for(int dy = 0; dy<(int)YSPEED;dy++)
+			{
+				HITBOX.setLocation(X, Y+dy);
+			if(HITBOX.intersects(environment.get(i).getHitbox()))
+			{
 				intersected = true;
+			YSPEED = dy;
+			}
+			}
+			if(intersected)
+				break;
 		}
+		Y += YSPEED;	//Ökar position i Y-led
 		if(intersected)	//Stannar vid "golvet" på 500 px
 		{
 			Y_DIRECTION=-1;	//Sätter direction så spelaren hoppar
 			YSPEED=0;	//Sätter hastigheten till noll
 		}
-		else
-			Y += YSPEED;	//Ökar position i Y-led
+
+			
 		
 		HITBOX.setRect(X, Y, WIDTH, HEIGHT);	//Uppdaterar HITBOX
 		

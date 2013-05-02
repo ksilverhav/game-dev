@@ -14,6 +14,9 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ import environment.StandardFloor;
 
 
 
-public class Game implements Runnable, KeyListener {
+public class Game implements Runnable, KeyListener{
 	/**
 	 * Klassen som ritar ut allt och kör Game-loopen Senast uppdaterad av: Jacob
 	 * Pålsson Senast uppdaterad den: 4/30/2013
@@ -40,7 +43,7 @@ public class Game implements Runnable, KeyListener {
 	int SCREENHEIGHT = (int) screenSize.getHeight();
 	List<BaseEnvironment> environment =  Collections.synchronizedList(new ArrayList<BaseEnvironment>());
 	Player player = new Player();
-	
+	Aim aim = new Aim();
 	public boolean running = false;
 
 	/**
@@ -102,6 +105,17 @@ public class Game implements Runnable, KeyListener {
 	    	  player.keyReleased(e);
 	      }
 
+	    });
+	    
+	    app.addMouseMotionListener(new MouseAdapter(){
+	    	public void mouseDragged(MouseEvent m) {
+	    		aim.mouseDragged(m);
+	    		
+	    	}
+	    	public void mouseMoved(MouseEvent m) {
+	    		aim.mouseMoved(m);
+	    		
+	    	}
 	    });
 
 	                
@@ -291,9 +305,11 @@ public class Game implements Runnable, KeyListener {
 	}
 	
 	public void render(Graphics2D g2d) {
-		player.paint(g2d);
-		for(int i = 0; i < environment.size(); i++ )
+		player.paint(g2d); // Ritar ut spelare
+		aim.paint(g2d); //Ritar ut siktet på skärmen
+		for(int i = 0; i < environment.size(); i++ ) //Ritar ut miljö
 			environment.get(i).render(g2d);
+		
 	
 	}
 
@@ -317,4 +333,6 @@ public class Game implements Runnable, KeyListener {
 	public void keyTyped(KeyEvent e) {
 
 	}
+
+	
 }

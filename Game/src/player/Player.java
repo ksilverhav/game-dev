@@ -17,28 +17,27 @@ public class Player {
 									// spelaren är på väg.
 	private int Y_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
 									// spelaren är på väg.
-	
+
 	private boolean jump = false; // Variabel som säger om player ska hoppa.
 	private double YSPEED = 2; // Hastighet i Y-led
 	private double XSPEED = 2; // Hastighet i X-led
 	private Rectangle HITBOX;;
 	private final double GRAVITY = 1; // Konstant gravitation
-	private final double JUMPHEIGHT = -10;	//Höjden på ett hopp
-
+	private final double JUMPHEIGHT = -10; // Höjden på ett hopp
 
 	public Player() {
-		HITBOX = new Rectangle(X, Y, WIDTH, HEIGHT); //Sätter hitboxen
+		HITBOX = new Rectangle(X, Y, WIDTH, HEIGHT); // Sätter hitboxen
 	}
 
 	public void move(List<BaseEnvironment> environment) {
 		boolean intersected = false;
-		if(jump && Y_DIRECTION == 0)
+		if (jump && Y_DIRECTION == 0) // Om knapp är nedtryckt + står på backen
 		{
 			YSPEED = JUMPHEIGHT; // spelaren hoppar
-		}
-		else
-			YSPEED += GRAVITY; // Ökar hastigheten i Y-led beroende på gravitation
-		if(YSPEED > 20)
+		} else
+			YSPEED += GRAVITY; // Ökar hastigheten i Y-led beroende på
+								// gravitation
+		if (YSPEED > 20)
 			YSPEED = 20;
 		X += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är nedtryckt
 		for (int i = 0; i < environment.size(); i++) { // Loopar igenom all
@@ -59,19 +58,18 @@ public class Player {
 										// inte ska krocka med något.
 					}
 				}
-				if (intersected)
-				{
-					Y_DIRECTION=0;
+				if (intersected) {
+					Y_DIRECTION = 0; // detta tillåter hopp.
 					break;
 				}
 			}
-			Y_DIRECTION=-1;
+			Y_DIRECTION = -1; //Sätter att spelaren inte får hoppa om man inte står på backen
 		}
 		Y += YSPEED; // Ökar position i Y-led
-		
+
 		if (intersected) // Stannar vid "golvet" på 500 px
 		{
-			
+
 			YSPEED = 0; // Sätter hastigheten till noll
 		}
 
@@ -92,8 +90,8 @@ public class Player {
 		if (e.getKeyCode() == KeyEvent.VK_A)
 			X_DIRECTION = -1; // Sätter förflyttning i negativ riktning
 		if (e.getKeyCode() == KeyEvent.VK_W) {
-				jump=true;
-			
+			jump = true; // Sätter denna variabel till true för att hoppa
+
 		}
 
 	}
@@ -103,14 +101,12 @@ public class Player {
 			X_DIRECTION = 0;
 		if (e.getKeyCode() == KeyEvent.VK_A && X_DIRECTION == -1)
 			X_DIRECTION = 0;
-		if (e.getKeyCode() == KeyEvent.VK_W)
-		{
-			jump=false;
-			if(YSPEED <-1)
-				YSPEED=-1;
+		if (e.getKeyCode() == KeyEvent.VK_W) {
+			jump = false;
+			if (YSPEED < -1)
+				YSPEED = -1;
 		}
 
 	}
-
 
 }

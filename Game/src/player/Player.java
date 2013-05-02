@@ -17,6 +17,8 @@ public class Player {
 									// spelaren är på väg.
 	private int Y_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
 									// spelaren är på väg.
+	
+	private boolean jump = false; // Variabel som säger om player ska hoppa.
 	private double YSPEED = 2; // Hastighet i Y-led
 	private double XSPEED = 2; // Hastighet i X-led
 	private Rectangle HITBOX;;
@@ -30,7 +32,12 @@ public class Player {
 
 	public void move(List<BaseEnvironment> environment) {
 		boolean intersected = false;
-		YSPEED += GRAVITY; // Ökar hastigheten i Y-led beroende på gravitation
+		if(jump && Y_DIRECTION == 0)
+		{
+			YSPEED = JUMPHEIGHT; // spelaren hoppar
+		}
+		else
+			YSPEED += GRAVITY; // Ökar hastigheten i Y-led beroende på gravitation
 		if(YSPEED > 20)
 			YSPEED = 20;
 		X += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är nedtryckt
@@ -53,14 +60,18 @@ public class Player {
 					}
 				}
 				if (intersected)
+				{
+					Y_DIRECTION=0;
 					break;
+				}
 			}
+			Y_DIRECTION=-1;
 		}
 		Y += YSPEED; // Ökar position i Y-led
 		
 		if (intersected) // Stannar vid "golvet" på 500 px
 		{
-			Y_DIRECTION = -1; // Sätter direction så spelaren hoppar
+			
 			YSPEED = 0; // Sätter hastigheten till noll
 		}
 
@@ -81,10 +92,8 @@ public class Player {
 		if (e.getKeyCode() == KeyEvent.VK_A)
 			X_DIRECTION = -1; // Sätter förflyttning i negativ riktning
 		if (e.getKeyCode() == KeyEvent.VK_W) {
-			if (Y_DIRECTION == -1)
-				YSPEED = JUMPHEIGHT; // spelaren hoppar
-			Y_DIRECTION = 0; // Sätter Y_DIRECTION till 0 så spelaren inte kan
-								// hoppa förän han träffar backen igen.
+				jump=true;
+			
 		}
 
 	}
@@ -94,8 +103,12 @@ public class Player {
 			X_DIRECTION = 0;
 		if (e.getKeyCode() == KeyEvent.VK_A && X_DIRECTION == -1)
 			X_DIRECTION = 0;
-		if (e.getKeyCode() == KeyEvent.VK_W && YSPEED < 0)
-			YSPEED = 0; // Stannar gubben om hoppknappen släpps
+		if (e.getKeyCode() == KeyEvent.VK_W)
+		{
+			jump=false;
+			if(YSPEED <-1)
+				YSPEED=-1;
+		}
 
 	}
 

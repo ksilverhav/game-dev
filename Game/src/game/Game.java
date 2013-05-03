@@ -34,8 +34,10 @@ import environment.StandardFloor;
 public class Game implements Runnable {
 
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int SCREENWIDTH = (int) screenSize.getWidth();
-	private int SCREENHEIGHT = (int) screenSize.getHeight();
+	private final int SCREENWIDTH = (int) screenSize.getWidth();
+	private final int SCREENHEIGHT = (int) screenSize.getHeight();
+	private final double WIDTHSCALE = (double)SCREENWIDTH / 1920;
+	private final double HEIGHTSCALE = (double)SCREENHEIGHT / 1080;
 	private List<BaseEnvironment> environment = Collections.synchronizedList(new ArrayList<BaseEnvironment>());
 	private Player player = new Player();
 	private JFrame app = new JFrame();
@@ -103,7 +105,7 @@ public class Game implements Runnable {
 			}
 
 			public void mouseReleased(MouseEvent m) {
-				player.mousePressed(m);
+				player.mouseReleased(m);
 			}
 
 		});
@@ -208,7 +210,9 @@ public class Game implements Runnable {
 
 	public void render(Graphics2D g2d) {
 		g2d = bi.createGraphics();
-
+		
+		g2d.scale(WIDTHSCALE, HEIGHTSCALE);
+		
 		// draw background
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);

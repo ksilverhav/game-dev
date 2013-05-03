@@ -137,4 +137,9 @@ public class Player extends Rectangle {
 
 	}
 
+	public void mouseReleased(MouseEvent m) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

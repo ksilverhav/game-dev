@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.Font;
@@ -16,7 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -30,9 +31,7 @@ import player.Player;
 import environment.BaseEnvironment;
 import environment.StandardFloor;
 
-
-
-public class Game implements Runnable, KeyListener{
+public class Game implements Runnable, KeyListener {
 	/**
 	 * Klassen som ritar ut allt och kör Game-loopen Senast uppdaterad av: Jacob
 	 * Pålsson Senast uppdaterad den: 4/30/2013
@@ -41,9 +40,10 @@ public class Game implements Runnable, KeyListener{
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	int SCREENWIDTH = (int) screenSize.getWidth();
 	int SCREENHEIGHT = (int) screenSize.getHeight();
-	List<BaseEnvironment> environment =  Collections.synchronizedList(new ArrayList<BaseEnvironment>());
+	List<BaseEnvironment> environment = Collections
+			.synchronizedList(new ArrayList<BaseEnvironment>());
 	Player player = new Player();
-	Aim aim = new Aim();
+
 	public boolean running = false;
 
 	/**
@@ -51,16 +51,19 @@ public class Game implements Runnable, KeyListener{
 	 */
 	public static void main(String[] args) {
 		new Game().start();
-		
-	}
-	JFrame app = new JFrame();
-	Canvas canvas = new Canvas();
-	int i=0;
-	public Game() {
-		environment.add(new StandardFloor(0, 500, 1000, 50));
 
 	}
-	
+
+	JFrame app = new JFrame();
+	Canvas canvas = new Canvas();
+	int i = 0;
+
+	public Game() {
+		environment.add(new StandardFloor(0, 500, 1000, 50));
+		environment.add(new StandardFloor(60, 450, 100, 50));
+
+	}
+
 	public synchronized void start() {
 		running = true;
 		new Thread(this).start();
@@ -79,244 +82,220 @@ public class Game implements Runnable, KeyListener{
 	 */
 	public void run() {
 
-	    // Create game window...
-	    JFrame app = new JFrame();
-	    int ups=0;
-	    app.setIgnoreRepaint( true );
+		// Create game window...
+		JFrame app = new JFrame();
+		int ups = 0;
+		app.setIgnoreRepaint(true);
 
-	    app.setUndecorated( true );
+		app.setUndecorated(true);
+		// Sätter muspekaren till ett hårkors
+		app.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 
-	                
+		// Add ESC listener to quit...
 
-	    // Add ESC listener to quit...
+		app.addKeyListener(new KeyAdapter() {
 
-	    app.addKeyListener( new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				player.keyPressed(e);
 
-	      public void keyPressed( KeyEvent e ) {
-	    	  player.keyPressed(e);
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 
-	        if( e.getKeyCode() == KeyEvent.VK_ESCAPE )
+					running = false;
 
-	            running = false;
+			}
 
-	          }
-	      public void keyReleased( KeyEvent e )
-	      {
-	    	  player.keyReleased(e);
-	      }
+			public void keyReleased(KeyEvent e) {
+				player.keyReleased(e);
+			}
 
-	    });
-	    
-	    app.addMouseMotionListener(new MouseAdapter(){
-	    	public void mouseDragged(MouseEvent m) {
-	    		aim.mouseDragged(m);
-	    		
-	    	}
-	    	public void mouseMoved(MouseEvent m) {
-	    		aim.mouseMoved(m);
-	    		
-	    	}
-	    });
+		});
 
-	                
+		app.addMouseListener(new MouseAdapter() {
+			
+			public void mouseClicked(MouseEvent m) {
+				player.mouseClicked(m);
+			}
 
-	    // Get graphics configuration...
+			
+			
+			public void mousePressed(MouseEvent m) {
+				player.mousePressed(m);
+				
+			}
 
-	    GraphicsEnvironment ge = 
+			
+			public void mouseReleased(MouseEvent m) {
+				player.mousePressed(m);
+			}
 
-	        GraphicsEnvironment.getLocalGraphicsEnvironment();
+		});
 
-	    GraphicsDevice gd = ge.getDefaultScreenDevice();
+		// Get graphics configuration...
 
-	    GraphicsConfiguration gc = gd.getDefaultConfiguration();
+		GraphicsEnvironment ge =
 
+		GraphicsEnvironment.getLocalGraphicsEnvironment();
 
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
 
-	    // Change to full screen
+		GraphicsConfiguration gc = gd.getDefaultConfiguration();
 
-	    gd.setFullScreenWindow( app );
+		// Change to full screen
 
-	    if( gd.isDisplayChangeSupported() ) {
+		gd.setFullScreenWindow(app);
 
-	      gd.setDisplayMode( 
+		if (gd.isDisplayChangeSupported()) {
 
-	        new DisplayMode( SCREENWIDTH, SCREENHEIGHT, 32, DisplayMode.REFRESH_RATE_UNKNOWN )
+			gd.setDisplayMode(
 
-	      );
+			new DisplayMode(SCREENWIDTH, SCREENHEIGHT, 32,
+					DisplayMode.REFRESH_RATE_UNKNOWN)
 
-	    }
+			);
 
-	                
+		}
 
-	    // Create BackBuffer...
+		// Create BackBuffer...
 
-	    app.createBufferStrategy( 2 );
+		app.createBufferStrategy(2);
 
-	    BufferStrategy buffer = app.getBufferStrategy();
+		BufferStrategy buffer = app.getBufferStrategy();
 
-	                
+		// Create off-screen drawing surface
 
-	    // Create off-screen drawing surface
+		BufferedImage bi = gc.createCompatibleImage(SCREENWIDTH, SCREENHEIGHT);
 
-	    BufferedImage bi = gc.createCompatibleImage( SCREENWIDTH, SCREENHEIGHT );
+		// Objects needed for rendering...
 
+		Graphics graphics = null;
 
+		Graphics2D g2d = null;
 
-	    // Objects needed for rendering...
+		Color background = Color.BLACK;
 
-	    Graphics graphics = null;
+		Random rand = new Random();
 
-	    Graphics2D g2d = null;
+		// Variables for counting frames per seconds
 
-	    Color background = Color.BLACK;
+		int fps = 0;
 
-	    Random rand = new Random();
+		int frames = 0;
 
-	                
+		long totalTime = 0;
 
-	    // Variables for counting frames per seconds
+		long curTime = System.currentTimeMillis();
 
-	    int fps = 0;
+		long lastTime = curTime;
 
-	    int frames = 0;
-
-	    long totalTime = 0;
-
-	    long curTime = System.currentTimeMillis();
-
-	    long lastTime = curTime;
-
-	                
-
-	    running = true;
+		running = true;
 
 		long currentTime = System.currentTimeMillis();
 		double nsPerTick = 1000000000D / 60D;
-		
+
 		double delta = 0;
 
-	    
-	    while( running ) {
-	    	
-	      try {
+		while (running) {
 
-	        // count Frames per second...
+			try {
 
-	        lastTime = curTime;
+				// count Frames per second...
 
-	        curTime = System.currentTimeMillis();
+				lastTime = curTime;
 
-	        totalTime += curTime - lastTime;
+				curTime = System.currentTimeMillis();
 
-	        if( totalTime > 1000 ) {
+				totalTime += curTime - lastTime;
 
-	          totalTime -= 1000;
+				if (totalTime > 1000) {
 
-	          fps = frames;
+					totalTime -= 1000;
 
-	          frames = 0;
+					fps = frames;
 
-	        } 
+					frames = 0;
 
-	        ++frames;
+				}
 
+				++frames;
 
+				// clear back buffer...
 
-	        // clear back buffer...
+				g2d = bi.createGraphics();
 
-	        g2d = bi.createGraphics();
+				g2d.setColor(background);
 
-	        g2d.setColor( background );
+				g2d.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
 
-	        g2d.fillRect( 0, 0, SCREENWIDTH, SCREENHEIGHT );
+				// draw some rectangles...
 
-	                                
+				render(g2d);
 
-	        // draw some rectangles...
+				// display frames per second...
 
-	        
-	        render(g2d);
-	        
-	                                
-	        
-	        // display frames per second...
+				g2d.setFont(new Font("Courier New", Font.PLAIN, 12));
 
-	        g2d.setFont( new Font( "Courier New", Font.PLAIN, 12 ) );
+				g2d.setColor(Color.GREEN);
 
-	        g2d.setColor( Color.GREEN );
+				g2d.drawString(String.format("FPS: %s", fps), 20, 20);
 
-	        g2d.drawString( String.format( "FPS: %s", fps ), 20, 20 );
-	        
-	        
-	        
-	        
-	    	if(ups <=100)
-	    	{
-	    		
-	    		update();
-	    		ups++;
-	    	}
-	    	if(System.currentTimeMillis() - currentTime > 1000)
-	    	{
-	    		currentTime = System.currentTimeMillis();
-	    		ups = 0;
-	    	}
-	    		
-	        // Blit image and flip...
+				if (ups <= 100) {
 
-	        graphics = buffer.getDrawGraphics();
+					update();
+					ups++;
+				}
+				if (System.currentTimeMillis() - currentTime > 1000) {
+					currentTime = System.currentTimeMillis();
+					ups = 0;
+				}
 
-	        graphics.drawImage( bi, 0, 0, null );
+				// Blit image and flip...
 
-	                                
+				graphics = buffer.getDrawGraphics();
 
-	        if( !buffer.contentsLost() )
+				graphics.drawImage(bi, 0, 0, null);
 
-	          buffer.show();
+				if (!buffer.contentsLost())
 
-	        
+					buffer.show();
 
-	      } finally {
+			} finally {
 
-	        // release resources
+				// release resources
 
-	        if( graphics != null ) 
+				if (graphics != null)
 
-	          graphics.dispose();
+					graphics.dispose();
 
-	        if( g2d != null ) 
+				if (g2d != null)
 
-	          g2d.dispose();
+					g2d.dispose();
 
-	      }
+			}
 
-	    }
+		}
 
-	                
+		gd.setFullScreenWindow(null);
 
-	    gd.setFullScreenWindow( null );
-
-	    System.exit(0);
+		System.exit(0);
 	}
 
 	public void update() {
 		player.move(environment);
-        
+
 	}
-	
+
 	public void render(Graphics2D g2d) {
 		player.paint(g2d); // Ritar ut spelare
-		aim.paint(g2d); //Ritar ut siktet på skärmen
-		for(int i = 0; i < environment.size(); i++ ) //Ritar ut miljö
+
+		for (int i = 0; i < environment.size(); i++)
+			// Ritar ut miljö
 			environment.get(i).render(g2d);
-		
-	
 	}
 
 	// Skickar vidare knappytryckningar till JPanel för behandling.
 	@Override
 	public void keyPressed(KeyEvent e) {
-	player.keyPressed(e);
+		player.keyPressed(e);
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) // Stänger av spelet om ESC
 													// trycks
 			System.exit(0);
@@ -325,8 +304,8 @@ public class Game implements Runnable, KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	player.keyReleased(e);
-		
+		player.keyReleased(e);
+
 	}
 
 	@Override
@@ -334,5 +313,5 @@ public class Game implements Runnable, KeyListener{
 
 	}
 
-	
+
 }

@@ -4,15 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import environment.BaseEnvironment;
 
-public class Player {
-	private int X = 0; // Spelarens X-position
-	private int Y = 0; // Spelarens Y-position
-	private int WIDTH = 25;
-	private int HEIGHT = 25;
+public class Player extends Rectangle {
+
 	private int X_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
 									// spelaren är på väg.
 	private int Y_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
@@ -21,16 +19,18 @@ public class Player {
 	private boolean jump = false; // Variabel som säger om player ska hoppa.
 	private double YSPEED = 2; // Hastighet i Y-led
 	private double XSPEED = 2; // Hastighet i X-led
-	private Rectangle HITBOX;;
+	
 	private final double GRAVITY = 1; // Konstant gravitation
 	private final double JUMPHEIGHT = -10; // Höjden på ett hopp
 
 	public Player() {
-		HITBOX = new Rectangle(X, Y, WIDTH, HEIGHT); // Sätter hitboxen
+		width=25;
+		height=25;
 	}
 
 	public void move(List<BaseEnvironment> environment) {
-		boolean intersected = false;
+		boolean yIntersected = false;
+		boolean xIntersected = false;
 		if (jump && Y_DIRECTION == 0) // Om knapp är nedtryckt + står på backen
 		{
 			YSPEED = JUMPHEIGHT; // spelaren hoppar
@@ -39,48 +39,67 @@ public class Player {
 								// gravitation
 		if (YSPEED > 20)
 			YSPEED = 20;
-		X += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är nedtryckt
+		
 		for (int i = 0; i < environment.size(); i++) { // Loopar igenom all
 														// environment
-			if ((new Rectangle(HITBOX.x, HITBOX.y + (int) YSPEED, HITBOX.width,
-			// Testar om spelaren kommer krocka med något i sin nästa
-			// förflyttning
-					HITBOX.height)).intersects(environment.get(i).getHitbox())) {
+			if ((new Rectangle(x, y + (int) YSPEED, width,
+					height)).intersects(environment.get(i).getHitbox())) {
+				
 				// Flyttar spelaren till sista pixeln som inte spelaren krockar
 				// med ett föremål
-				for (int dy = 0; dy < (int) YSPEED; dy++) {
-					HITBOX.setLocation(X, Y + dy);
-					if (HITBOX.intersects(environment.get(i).getHitbox())) {
-						intersected = true; // Om spelaren krockar med något
-											// sätts denna till true
-						YSPEED = dy; // Sätter speed till den högsta hastigheten
-										// tillåten för att nästa förflyttning
-										// inte ska krocka med något.
+				for (int dy = 0; dy < (int) (YSPEED); dy++) {
+					y+=1;
+					if(intersects(environment.get(i)))
+					{
+						yIntersected=true;
+						y-=1;
+						YSPEED=0;
+						
+						break;
+					}
+					
+				}
+				
+
+				if (yIntersected) {
+					Y_DIRECTION = 0; // detta tillåter hopp.
+					
+				}
+				
+			}
+				if(!yIntersected)
+				Y_DIRECTION = -1; // Sätter att spelaren inte får hoppa om man
+									// inte står på MARKEN
+				if(new Rectangle(x+X_DIRECTION * (int)XSPEED,y,width,height).intersects(environment.get(i).getHitbox()))
+				{
+					for(int dx = 0; dx!=(int)XSPEED; dx+=1){
+					if((new Rectangle(x+X_DIRECTION,y,width,height).intersects(environment.get(i).getHitbox())))
+					{
+						xIntersected=true;
+					}
+					else
+						x+=X_DIRECTION;
 					}
 				}
-				if (intersected) {
-					Y_DIRECTION = 0; // detta tillåter hopp.
-					break;
-				}
-			}
-			Y_DIRECTION = -1; //Sätter att spelaren inte får hoppa om man inte står på backen
 		}
-		Y += YSPEED; // Ökar position i Y-led
-
-		if (intersected) // Stannar vid "golvet" på 500 px
+		
+		y += YSPEED; // Ökar position i Y-led
+		if(!xIntersected)
+		x += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är nedtryckt
+		if (yIntersected) // Stannar vid "golvet" på 500 px
 		{
 
 			YSPEED = 0; // Sätter hastigheten till noll
 		}
 
-		HITBOX.setRect(X, Y, WIDTH, HEIGHT); // Uppdaterar HITBOX
+		
 
 	}
 
 	// Ritar ut spelaren
 	public void paint(Graphics2D g) {
 		g.setColor(Color.RED);
-		g.fillRect(X, Y, WIDTH, HEIGHT);
+		g.fillRect(x, y, width, height);
 	}
 
 	// Tar hand om knapptryckningar
@@ -106,6 +125,15 @@ public class Player {
 			if (YSPEED < -1)
 				YSPEED = -1;
 		}
+	}
+
+	public void mouseClicked(MouseEvent m) {
+		System.out.println("Mouse clicked");
+
+	}
+
+	public void mousePressed(MouseEvent m) {
+		// TODO Auto-generated method stub
 
 	}
 

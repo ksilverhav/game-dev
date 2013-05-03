@@ -38,7 +38,6 @@ public class Images {
 		        @Override
 		        public FileVisitResult preVisitDirectory(Path dir,
 		                BasicFileAttributes attrs) {
-		            System.out.println("Dir: " + dir.toString());
 		            return FileVisitResult.CONTINUE;
 		        }
 

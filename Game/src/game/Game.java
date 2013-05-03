@@ -79,7 +79,11 @@ public class Game implements Runnable {
 				player.keyReleased(e);
 			}
 		});
-
+		app.addMouseMotionListener(new MouseAdapter(){
+			public void mouseMoved(MouseEvent me) {
+			    player.mouseMoved(me);
+			  }
+		});
 		app.addMouseListener(new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent m) {

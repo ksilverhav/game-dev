@@ -42,8 +42,8 @@ public class Player extends Rectangle {
 	private int screenHeight;
 
 	public Player(int screenWidth, int screenHeight, Images images) {
-		x = 2000;
-		y = 2000;
+		x = startPoint.x;
+		y = startPoint.y;
 		width = 56;
 		height = 94;
 		this.screenWidth = screenWidth;
@@ -149,13 +149,10 @@ public class Player extends Rectangle {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_D) {
 			X_DIRECTION = 1; // Sätter förflyttning i positiv riktning
-			lookingRight = true; // Så utmålningen vet åt vilket håll gubben
-									// tittar
+
 		}
 		if (e.getKeyCode() == KeyEvent.VK_A) {
 			X_DIRECTION = -1; // Sätter förflyttning i negativ riktning
-			lookingRight = false; // Så utmålningen vet åt vilket håll gubben
-									// tittar
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {

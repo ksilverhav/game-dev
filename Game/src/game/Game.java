@@ -57,28 +57,7 @@ public class Game implements Runnable {
 		environment.add(new StandardFloor(0, 500, 1000, 50));
 		environment.add(new StandardFloor(60, 450, 100, 50));
 		environment.add(new StandardFloor(1000, 1000, 300, 50));
-	}
-
-	public synchronized void start() {
-		running = true;
-		new Thread(this).start();
-	}
-
-	public synchronized void stop() {
-		if (!this.running) {
-			return;
-		}
-		this.running = false;
-	}
-
-	@Override
-	/**
-	 * Nedan kommer en funktion som kör gameloopen, anpassat för 60 UPS
-	 */
-	public void run() {
-
-		// Create game window...
-		int ups = 0;
+		
 		app.setIgnoreRepaint(true);
 
 		app.setUndecorated(true);
@@ -114,6 +93,25 @@ public class Game implements Runnable {
 			}
 
 		});
+	}
+
+	public synchronized void start() {
+		running = true;
+		new Thread(this).start();
+	}
+
+	public synchronized void stop() {
+		if (!this.running) {
+			return;
+		}
+		this.running = false;
+	}
+
+	@Override
+	/**
+	 * Nedan kommer en funktion som kör gameloopen, anpassat för 60 UPS
+	 */
+	public void run() {
 
 		// Get graphics configuration...
 
@@ -141,6 +139,7 @@ public class Game implements Runnable {
 		Graphics2D g2d = null;
 
 		// Variables for counting frames per seconds
+		int ups = 0;
 		fps = 0;
 		int frames = 0;
 		long totalTime = 0;
@@ -215,11 +214,8 @@ public class Game implements Runnable {
 
 	public void render(Graphics2D g2d) {
 		g2d = bi.createGraphics();
-		
+
 		g2d.scale(WIDTHSCALE, HEIGHTSCALE);
-		
-		int xOffset = player.getCamera().x;
-		int yOffset = player.getCamera().y;
 		
 		// draw background
 		g2d.setColor(backgroundColor);
@@ -229,15 +225,19 @@ public class Game implements Runnable {
 		g2d.setFont(new Font("Courier New", Font.PLAIN, 12));
 		g2d.setColor(Color.GREEN);
 		g2d.drawString(String.format("FPS: %s", fps), 20, 20);
-		
 
-		player.render(g2d,images); // Ritar ut spelare
+		// Det som ritas ut relaterar till kamerans position
+		g2d.translate(-player.getCamera().x, -player.getCamera().y);
 
-		for (int i = 0; i < environment.size(); i++){
-			// Ritar ut miljö
-			environment.get(i).render(g2d);
-			
+		player.render(g2d, images); // Ritar ut spelare
+
+		for (int i = 0; i < environment.size(); i++) {
+			if (environment.get(i).intersects(player.getCamera())) {
+				// Ritar ut miljö
+				environment.get(i).render(g2d);
+			}
 		}
+
 		g2d.dispose();
 	}
 

@@ -33,13 +33,18 @@ public class Player extends Rectangle {
 	private final double JUMPHEIGHT = -10; // Höjden på ett hopp
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	private final String PLAYERIMAGE = "player.png";
+	
+>>>>>>> camera
 	private Rectangle camera;
 	private int screenWidth;
 	private int screenHeight;
 
 	public Player(int screenWidth, int screenHeight) {
-		width=25;
-		height=25;
+		width=56;
+		height=94;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		camera = new Rectangle(screenWidth, screenHeight);
@@ -57,6 +62,7 @@ public class Player extends Rectangle {
 	
 	public Rectangle getCamera(){
 		return camera;
+<<<<<<< HEAD
 =======
 	private final String PLAYERIMAGE = "player.png";
 
@@ -64,6 +70,8 @@ public class Player extends Rectangle {
 		width=56;
 		height=94;
 >>>>>>> c914ca934873163299a847652e88f51d4e508001
+=======
+>>>>>>> camera
 	}
 
 	public void move(List<BaseEnvironment> environment) {
@@ -136,12 +144,15 @@ public class Player extends Rectangle {
 
 	// Ritar ut spelaren
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public void render(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.fillRect(x, y, width, height);
 		g.setColor(Color.YELLOW);
 		g.drawRect(camera.x, camera.y, (int)camera.getWidth(), (int)camera.getHeight());
 =======
+=======
+>>>>>>> camera
 	public void render(Graphics2D g, Images images) {
 		Image im = images.getImage(PLAYERIMAGE);
 		
@@ -156,7 +167,10 @@ public class Player extends Rectangle {
 		g.drawImage(images.getImage(PLAYERIMAGE),x,y,width,height,null);
 		
 		
+<<<<<<< HEAD
 >>>>>>> c914ca934873163299a847652e88f51d4e508001
+=======
+>>>>>>> camera
 	}
 
 	// Tar hand om knapptryckningar

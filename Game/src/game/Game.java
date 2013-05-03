@@ -119,7 +119,7 @@ public class Game implements Runnable {
 		gd.setFullScreenWindow(app);
 
 		if (gd.isDisplayChangeSupported()) {
-			gd.setDisplayMode(new DisplayMode(SCREENWIDTH, SCREENHEIGHT, 32, DisplayMode.REFRESH_RATE_UNKNOWN));
+			gd.setDisplayMode(new DisplayMode(SCREENWIDTH, SCREENHEIGHT, 32, 60));
 		}
 
 		// Create BackBuffer...

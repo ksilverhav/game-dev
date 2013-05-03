@@ -1,5 +1,7 @@
 package game;
 
+import images.Images;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -38,13 +40,14 @@ public class Game implements Runnable {
 	private final int SCREENHEIGHT = (int) ((SCREENWIDTH/16)*9);
 	private final double WIDTHSCALE = (double)SCREENWIDTH / 1920;
 	private final double HEIGHTSCALE = (double)SCREENHEIGHT / 1080;
+	private final Color backgroundColor = new Color(127,224,239);
 	private List<BaseEnvironment> environment = Collections.synchronizedList(new ArrayList<BaseEnvironment>());
 	private Player player = new Player();
 	private JFrame app = new JFrame();
 	public boolean running = false;
 	private BufferedImage bi;
 	private int fps = 0;
-
+	Images images = new Images();	//Laddar in alla bilder
 	public static void main(String[] args) {
 		new Game().start();
 	}
@@ -215,7 +218,7 @@ public class Game implements Runnable {
 		g2d.scale(WIDTHSCALE, HEIGHTSCALE);
 		
 		// draw background
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(backgroundColor);
 		g2d.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
 
 		// display frames per second...
@@ -223,12 +226,11 @@ public class Game implements Runnable {
 		g2d.setColor(Color.GREEN);
 		g2d.drawString(String.format("FPS: %s", fps), 20, 20);
 
-		player.render(g2d); // Ritar ut spelare
+		player.render(g2d,images); // Ritar ut spelare
 
 		for (int i = 0; i < environment.size(); i++)
 			// Ritar ut miljö
 			environment.get(i).render(g2d);
-
 		g2d.dispose();
 	}
 

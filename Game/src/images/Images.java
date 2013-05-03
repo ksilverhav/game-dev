@@ -43,8 +43,7 @@ public class Images {
 		        }
 
 		        @Override
-		        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-		            System.out.println("File: " + file.toString());    
+		        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {    
 		            try {
 						allaBilder.add(ImageIO.read(new File(file.toString())));
 						allaBildNamn.add(file.toString().substring(file.toString().lastIndexOf("\\") + 1));

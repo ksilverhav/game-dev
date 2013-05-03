@@ -1,5 +1,7 @@
 package environment;
 
+import images.Images;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -15,7 +17,7 @@ public class StandardFloor extends BaseEnvironment {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
+	public void render(Graphics2D g2d,Images images) {
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(x, y, width, height);
 	}

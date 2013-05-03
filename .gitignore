@@ -1,4 +1,5 @@
 *.class
+Game/bin/*
 # Package Files #
 *.jar
 *.war

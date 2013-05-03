@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 
 import player.Player;
 import environment.BaseEnvironment;
+import environment.Platform;
 import environment.StandardFloor;
 
 /**
@@ -54,9 +55,10 @@ public class Game implements Runnable {
 
 	public Game() {
 
-		environment.add(new StandardFloor(0, 500, 1000, 50));
-		environment.add(new StandardFloor(60, 450, 100, 50));
-		environment.add(new StandardFloor(1000, 1000, 300, 50));
+		
+		
+		environment.add(new Platform(0, 500));
+		environment.add(new Platform(400, 1000));
 		
 		app.setIgnoreRepaint(true);
 
@@ -229,15 +231,17 @@ public class Game implements Runnable {
 		// Det som ritas ut relaterar till kamerans position
 		g2d.translate(-player.getCamera().x, -player.getCamera().y);
 
-		player.render(g2d, images); // Ritar ut spelare
+		
 
 		for (int i = 0; i < environment.size(); i++) {
 			if (environment.get(i).intersects(player.getCamera())) {
 				// Ritar ut miljö
-				environment.get(i).render(g2d);
+				environment.get(i).render(g2d,images);
 			}
 		}
-
+		
+		player.render(g2d, images); // Ritar ut spelare
+		
 		g2d.dispose();
 	}
 

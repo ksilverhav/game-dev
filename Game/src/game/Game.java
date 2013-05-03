@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -28,7 +29,6 @@ import javax.swing.JFrame;
 import player.Player;
 import environment.BaseEnvironment;
 import environment.Platform;
-import environment.StandardFloor;
 
 /**
  * Klassen som ritar ut allt och kör Game-loopen Senast uppdaterad av: Jacob
@@ -46,6 +46,7 @@ public class Game implements Runnable {
 	private Player player = new Player(SCREENWIDTH, SCREENHEIGHT);
 	private JFrame app = new JFrame();
 	public boolean running = false;
+	private final Point startpoint = new Point(2000,2000);
 	private BufferedImage bi;
 	private int fps = 0;
 	Images images = new Images();	//Laddar in alla bilder
@@ -57,8 +58,8 @@ public class Game implements Runnable {
 
 		
 		
-		environment.add(new Platform(0, 500));
-		environment.add(new Platform(400, 1000));
+		environment.add(new Platform(startpoint.x, startpoint.y + 100));
+		environment.add(new Platform(startpoint.x+400, startpoint.y+500));
 		
 		app.setIgnoreRepaint(true);
 

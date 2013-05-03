@@ -39,6 +39,8 @@ public class Player extends Rectangle {
 	private int screenHeight;
 
 	public Player(int screenWidth, int screenHeight) {
+		x=2000;
+		y=2000;
 		width=56;
 		height=94;
 		this.screenWidth = screenWidth;

@@ -4,6 +4,7 @@ import images.Images;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -27,6 +28,8 @@ public class Player extends Rectangle {
 	private double YSPEED = 2; // Hastighet i Y-led
 	private double XSPEED = 5; // Hastighet i X-led
 	
+	private final Point startPoint = new Point(2000,2000);
+	
 	private boolean lookingRight=true;
 	
 	private final double GRAVITY = 1; // Konstant gravitation
@@ -39,8 +42,8 @@ public class Player extends Rectangle {
 	private int screenHeight;
 
 	public Player(int screenWidth, int screenHeight) {
-		x=2000;
-		y=2000;
+		x=startPoint.x;
+		y=startPoint.y;
 		width=56;
 		height=94;
 		this.screenWidth = screenWidth;
@@ -149,16 +152,12 @@ public class Player extends Rectangle {
 	// Tar hand om knapptryckningar
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_D)
-		{
 			X_DIRECTION = 1; // Sätter förflyttning i positiv riktning
-			lookingRight = true; // Så utmålningen vet åt vilket håll gubben tittar
-		}
+
 		if (e.getKeyCode() == KeyEvent.VK_A)
-		{
 			X_DIRECTION = -1; // Sätter förflyttning i negativ riktning
-			lookingRight = false; // Så utmålningen vet åt vilket håll gubben tittar
-		}
-		if (e.getKeyCode() == KeyEvent.VK_W) {
+
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			jump = true; // Sätter denna variabel till true för att hoppa
 
 		}
@@ -170,7 +169,7 @@ public class Player extends Rectangle {
 			X_DIRECTION = 0;
 		if (e.getKeyCode() == KeyEvent.VK_A && X_DIRECTION == -1)
 			X_DIRECTION = 0;
-		if (e.getKeyCode() == KeyEvent.VK_W) {
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			jump = false;
 			if (YSPEED < -1)
 				YSPEED = -1;
@@ -189,6 +188,14 @@ public class Player extends Rectangle {
 
 	public void mouseReleased(MouseEvent m) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseMoved(MouseEvent m) {
+		if(m.getPoint().x > screenWidth/2)
+			lookingRight = true;
+			else
+			lookingRight = false;
 		
 	}
 

@@ -43,23 +43,22 @@ public class Game implements Runnable {
 	private final double HEIGHTSCALE = (double)SCREENHEIGHT / 1080;
 	private final Color backgroundColor = new Color(127,224,239);
 	private List<BaseEnvironment> environment = Collections.synchronizedList(new ArrayList<BaseEnvironment>());
-	private Player player = new Player(SCREENWIDTH, SCREENHEIGHT);
+	private Images images = new Images();	//Laddar in alla bilder
+	private Player player = new Player(SCREENWIDTH, SCREENHEIGHT, images);
 	private JFrame app = new JFrame();
 	public boolean running = false;
 	private final Point startpoint = new Point(2000,2000);
 	private BufferedImage bi;
 	private int fps = 0;
-	Images images = new Images();	//Laddar in alla bilder
+	
 	public static void main(String[] args) {
 		new Game().start();
 	}
 
 	public Game() {
-
 		
-		
-		environment.add(new Platform(startpoint.x, startpoint.y + 100));
-		environment.add(new Platform(startpoint.x+400, startpoint.y+500));
+		environment.add(new Platform(startpoint.x, startpoint.y + 100, images));
+		environment.add(new Platform(startpoint.x+400, startpoint.y+500, images));
 		
 		app.setIgnoreRepaint(true);
 
@@ -226,7 +225,7 @@ public class Game implements Runnable {
 
 		// display frames per second...
 		g2d.setFont(new Font("Courier New", Font.PLAIN, 12));
-		g2d.setColor(Color.GREEN);
+		g2d.setColor(Color.RED);
 		g2d.drawString(String.format("FPS: %s", fps), 20, 20);
 
 		// Det som ritas ut relaterar till kamerans position
@@ -241,7 +240,7 @@ public class Game implements Runnable {
 			}
 		}
 		
-		player.render(g2d, images); // Ritar ut spelare
+		player.render(g2d); // Ritar ut spelare
 		
 		g2d.dispose();
 	}

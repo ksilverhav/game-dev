@@ -12,8 +12,9 @@ public class StandardFloor extends BaseEnvironment {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public StandardFloor(int x, int y, int width, int height) {
-		super(x, y, width, height);
+	public StandardFloor(int x, int y, int width, int height, Images images) {
+		super(x, y, width, height, images);
+//		loadImages(imagePath, images);
 	}
 
 	@Override

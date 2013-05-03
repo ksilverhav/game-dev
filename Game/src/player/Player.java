@@ -17,7 +17,7 @@ public class Player extends Rectangle {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private int X_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
 									// spelaren är på väg.
 	private int Y_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
@@ -26,39 +26,41 @@ public class Player extends Rectangle {
 	private boolean jump = false; // Variabel som säger om player ska hoppa.
 	private double YSPEED = 2; // Hastighet i Y-led
 	private double XSPEED = 5; // Hastighet i X-led
-	
-	private boolean lookingRight=true;
-	
+
+	private boolean lookingRight = true;
+
 	private final double GRAVITY = 1; // Konstant gravitation
 	private final double JUMPHEIGHT = -15; // Höjden på ett hopp
-	
+
 	private final String PLAYERIMAGE = "player.png";
-	
+	private Image im;
+
 	private Rectangle camera;
 	private int screenWidth;
 	private int screenHeight;
 
-	public Player(int screenWidth, int screenHeight) {
-		x=2000;
-		y=2000;
-		width=56;
-		height=94;
+	public Player(int screenWidth, int screenHeight, Images images) {
+		x = 2000;
+		y = 2000;
+		width = 56;
+		height = 94;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		camera = new Rectangle(screenWidth, screenHeight);
+		loadImages(PLAYERIMAGE, images);
 	}
-	
-	private void updateCamera(int x, int y){
+
+	private void updateCamera(int x, int y) {
 		int camX = (int) (x - screenWidth / 2);
 		int camY = (int) (y - screenHeight / 2);
-		if(camX < 0)
+		if (camX < 0)
 			camX = 0;
-		if(camY < 0)
+		if (camY < 0)
 			camY = 0;
 		camera.setLocation(camX, camY);
 	}
-	
-	public Rectangle getCamera(){
+
+	public Rectangle getCamera() {
 		return camera;
 	}
 
@@ -73,90 +75,85 @@ public class Player extends Rectangle {
 								// gravitation
 		if (YSPEED > 20)
 			YSPEED = 20;
-		
+
 		for (int i = 0; i < environment.size(); i++) { // Loopar igenom all
 														// environment
-			if ((new Rectangle(x, y + (int) YSPEED, width,
-					height)).intersects(environment.get(i).getHitbox())) {
-				
+			if ((new Rectangle(x, y + (int) YSPEED, width, height)).intersects(environment.get(i).getHitbox())) {
+
 				// Flyttar spelaren till sista pixeln som inte spelaren krockar
 				// med ett föremål
 				for (int dy = 0; dy < (int) (YSPEED); dy++) {
-					y+=1;
-					if(intersects(environment.get(i)))
-					{
-						yIntersected=true;
-						y-=1;
-						YSPEED=0;
-						
+					y += 1;
+					if (intersects(environment.get(i))) {
+						yIntersected = true;
+						y -= 1;
+						YSPEED = 0;
+
 						break;
 					}
-					
+
 				}
-				
 
 				if (yIntersected) {
 					Y_DIRECTION = 0; // detta tillåter hopp.
-					
+
 				}
-				
+
 			}
-				if(!yIntersected)
+			if (!yIntersected)
 				Y_DIRECTION = -1; // Sätter att spelaren inte får hoppa om man
 									// inte står på MARKEN
-				if(new Rectangle(x+X_DIRECTION * (int)XSPEED,y,width,height).intersects(environment.get(i).getHitbox()))
-				{
-					for(int dx = 0; dx!=(int)XSPEED; dx+=1){
-					if((new Rectangle(x+X_DIRECTION,y,width,height).intersects(environment.get(i).getHitbox())))
-					{
-						xIntersected=true;
-					}
-					else
-						x+=X_DIRECTION;
-					}
+			if (new Rectangle(x + X_DIRECTION * (int) XSPEED, y, width, height).intersects(environment.get(i)
+					.getHitbox())) {
+				for (int dx = 0; dx != (int) XSPEED; dx += 1) {
+					if ((new Rectangle(x + X_DIRECTION, y, width, height).intersects(environment.get(i).getHitbox()))) {
+						xIntersected = true;
+					} else
+						x += X_DIRECTION;
 				}
+			}
 		}
-		
+
 		y += YSPEED; // Ökar position i Y-led
-		if(!xIntersected)
-		x += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är nedtryckt
+		if (!xIntersected)
+			x += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är
+										// nedtryckt
 		if (yIntersected) // Stannar vid "golvet" på 500 px
 		{
 
 			YSPEED = 0; // Sätter hastigheten till noll
 		}
-		
+
 		updateCamera((int) (this.x + (this.getWidth() / 2)), (int) (this.y + (this.getHeight() / 2)));
 
 	}
 
 	// Ritar ut spelaren
 
-	public void render(Graphics2D g, Images images) {
-		Image im = images.getImage(PLAYERIMAGE);
-		
-		if(lookingRight)
-		{
-			g.drawImage (im, 
-		             x + im.getWidth(null), y, x, y+im.getHeight(null),
-		             0, 0, im.getWidth(null), im.getHeight(null),
-		             null);
-		}
-		else
-		g.drawImage(images.getImage(PLAYERIMAGE),x,y,width,height,null);
+	public void render(Graphics2D g) {
+
+		if (lookingRight) {
+			g.drawImage(im, x + im.getWidth(null), y, x, y + im.getHeight(null), 0, 0, im.getWidth(null),
+					im.getHeight(null), null);
+		} else
+			g.drawImage(im, x, y, width, height, null);
+	}
+	
+	private void loadImages(String imagePath, Images images){
+		im = images.getImage(imagePath);
 	}
 
 	// Tar hand om knapptryckningar
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_D)
-		{
+		if (e.getKeyCode() == KeyEvent.VK_D) {
 			X_DIRECTION = 1; // Sätter förflyttning i positiv riktning
-			lookingRight = true; // Så utmålningen vet åt vilket håll gubben tittar
+			lookingRight = true; // Så utmålningen vet åt vilket håll gubben
+									// tittar
 		}
-		if (e.getKeyCode() == KeyEvent.VK_A)
-		{
+		if (e.getKeyCode() == KeyEvent.VK_A) {
 			X_DIRECTION = -1; // Sätter förflyttning i negativ riktning
-			lookingRight = false; // Så utmålningen vet åt vilket håll gubben tittar
+			lookingRight = false; // Så utmålningen vet åt vilket håll gubben
+									// tittar
 		}
 		if (e.getKeyCode() == KeyEvent.VK_W) {
 			jump = true; // Sätter denna variabel till true för att hoppa
@@ -189,7 +186,7 @@ public class Player extends Rectangle {
 
 	public void mouseReleased(MouseEvent m) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

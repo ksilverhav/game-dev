@@ -35,7 +35,7 @@ public class Game implements Runnable {
 
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private final int SCREENWIDTH = (int) screenSize.getWidth();
-	private final int SCREENHEIGHT = (int) screenSize.getHeight();
+	private final int SCREENHEIGHT = (int) ((SCREENWIDTH/16)*9);
 	private final double WIDTHSCALE = (double)SCREENWIDTH / 1920;
 	private final double HEIGHTSCALE = (double)SCREENHEIGHT / 1080;
 	private List<BaseEnvironment> environment = Collections.synchronizedList(new ArrayList<BaseEnvironment>());
@@ -50,6 +50,7 @@ public class Game implements Runnable {
 	}
 
 	public Game() {
+
 		environment.add(new StandardFloor(0, 500, 1000, 50));
 		environment.add(new StandardFloor(60, 450, 100, 50));
 	}

@@ -97,7 +97,7 @@ public class Player extends Rectangle {
 	}
 
 	// Ritar ut spelaren
-	public void paint(Graphics2D g) {
+	public void render(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.fillRect(x, y, width, height);
 	}

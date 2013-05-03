@@ -39,7 +39,7 @@ public class Game implements Runnable {
 	private final double WIDTHSCALE = (double)SCREENWIDTH / 1920;
 	private final double HEIGHTSCALE = (double)SCREENHEIGHT / 1080;
 	private List<BaseEnvironment> environment = Collections.synchronizedList(new ArrayList<BaseEnvironment>());
-	private Player player = new Player();
+	private Player player = new Player(SCREENWIDTH, SCREENHEIGHT);
 	private JFrame app = new JFrame();
 	public boolean running = false;
 	private BufferedImage bi;
@@ -53,6 +53,7 @@ public class Game implements Runnable {
 
 		environment.add(new StandardFloor(0, 500, 1000, 50));
 		environment.add(new StandardFloor(60, 450, 100, 50));
+		environment.add(new StandardFloor(1000, 1000, 300, 50));
 	}
 
 	public synchronized void start() {
@@ -214,21 +215,31 @@ public class Game implements Runnable {
 		
 		g2d.scale(WIDTHSCALE, HEIGHTSCALE);
 		
+		int xOffset = player.getCamera().x;
+		int yOffset = player.getCamera().y;
+//		int xOffset = player.getCamera().x;
+//		int yOffset = player.getCamera().y;
+//		int xOffset = 0;
+//		int yOffset = 0;
+		
 		// draw background
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(Color.DARK_GRAY);
 		g2d.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
 
 		// display frames per second...
 		g2d.setFont(new Font("Courier New", Font.PLAIN, 12));
 		g2d.setColor(Color.GREEN);
 		g2d.drawString(String.format("FPS: %s", fps), 20, 20);
+		
 
 		player.render(g2d); // Ritar ut spelare
 
-		for (int i = 0; i < environment.size(); i++)
+		for (int i = 0; i < environment.size(); i++){
 			// Ritar ut miljö
-			environment.get(i).render(g2d);
-
+			environment.get(i).render(g2d, 0, 0);
+			environment.get(i).setLocation(environment.get(i).getSpawnX()-xOffset, environment.get(i).getSpawnY()-yOffset);
+			
+		}
 		g2d.dispose();
 	}
 

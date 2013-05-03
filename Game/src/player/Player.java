@@ -11,6 +11,11 @@ import environment.BaseEnvironment;
 
 public class Player extends Rectangle {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private int X_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
 									// spelaren är på väg.
 	private int Y_DIRECTION = 0; // Variabel som säger åt vilket håll i x-led
@@ -22,10 +27,31 @@ public class Player extends Rectangle {
 	
 	private final double GRAVITY = 1; // Konstant gravitation
 	private final double JUMPHEIGHT = -10; // Höjden på ett hopp
+	
+	private Rectangle camera;
+	private int screenWidth;
+	private int screenHeight;
 
-	public Player() {
+	public Player(int screenWidth, int screenHeight) {
 		width=25;
 		height=25;
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+		camera = new Rectangle(screenWidth, screenHeight);
+	}
+	
+	private void updateCamera(int x, int y){
+		int camX = (int) (x - screenWidth / 2);
+		int camY = (int) (y - screenHeight / 2);
+		if(camX < 0)
+			camX = 0;
+		if(camY < 0)
+			camY = 0;
+		camera.setLocation(camX, camY);
+	}
+	
+	public Rectangle getCamera(){
+		return camera;
 	}
 
 	public void move(List<BaseEnvironment> environment) {
@@ -91,8 +117,8 @@ public class Player extends Rectangle {
 
 			YSPEED = 0; // Sätter hastigheten till noll
 		}
-
 		
+		updateCamera((int) (this.x + (this.getWidth() / 2)), (int) (this.y + (this.getHeight() / 2)));
 
 	}
 
@@ -100,6 +126,8 @@ public class Player extends Rectangle {
 	public void render(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.fillRect(x, y, width, height);
+		g.setColor(Color.YELLOW);
+		g.drawRect(camera.x, camera.y, (int)camera.getWidth(), (int)camera.getHeight());
 	}
 
 	// Tar hand om knapptryckningar

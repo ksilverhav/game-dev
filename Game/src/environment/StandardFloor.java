@@ -10,7 +10,7 @@ public class StandardFloor extends BaseEnvironment {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
+	public void render(Graphics2D g2d, int xOffset, int yOffset) {
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(x, y, width, height);
 	}

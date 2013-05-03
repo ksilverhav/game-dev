@@ -126,8 +126,6 @@ public class Player extends Rectangle {
 	public void render(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.fillRect(x, y, width, height);
-		g.setColor(Color.YELLOW);
-		g.drawRect(camera.x, camera.y, (int)camera.getWidth(), (int)camera.getHeight());
 	}
 
 	// Tar hand om knapptryckningar

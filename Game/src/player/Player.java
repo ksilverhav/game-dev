@@ -1,7 +1,9 @@
 package player;
 
-import java.awt.Color;
+import images.Images;
+
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -25,16 +27,20 @@ public class Player extends Rectangle {
 	private double YSPEED = 2; // Hastighet i Y-led
 	private double XSPEED = 2; // Hastighet i X-led
 	
+	private boolean lookingRight=true;
+	
 	private final double GRAVITY = 1; // Konstant gravitation
 	private final double JUMPHEIGHT = -10; // Höjden på ett hopp
+	
+	private final String PLAYERIMAGE = "player.png";
 	
 	private Rectangle camera;
 	private int screenWidth;
 	private int screenHeight;
 
 	public Player(int screenWidth, int screenHeight) {
-		width=25;
-		height=25;
+		width=56;
+		height=94;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		camera = new Rectangle(screenWidth, screenHeight);
@@ -123,17 +129,34 @@ public class Player extends Rectangle {
 	}
 
 	// Ritar ut spelaren
-	public void render(Graphics2D g) {
-		g.setColor(Color.RED);
-		g.fillRect(x, y, width, height);
+	public void render(Graphics2D g, Images images) {
+		Image im = images.getImage(PLAYERIMAGE);
+		
+		if(lookingRight)
+		{
+			g.drawImage (im, 
+		             x + im.getWidth(null), y, x, y+im.getHeight(null),
+		             0, 0, im.getWidth(null), im.getHeight(null),
+		             null);
+		}
+		else
+		g.drawImage(images.getImage(PLAYERIMAGE),x,y,width,height,null);
+		
+		
 	}
 
 	// Tar hand om knapptryckningar
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_D)
+		{
 			X_DIRECTION = 1; // Sätter förflyttning i positiv riktning
+			lookingRight = true; // Så utmålningen vet åt vilket håll gubben tittar
+		}
 		if (e.getKeyCode() == KeyEvent.VK_A)
+		{
 			X_DIRECTION = -1; // Sätter förflyttning i negativ riktning
+			lookingRight = false; // Så utmålningen vet åt vilket håll gubben tittar
+		}
 		if (e.getKeyCode() == KeyEvent.VK_W) {
 			jump = true; // Sätter denna variabel till true för att hoppa
 

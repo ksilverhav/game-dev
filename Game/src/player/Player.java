@@ -22,7 +22,7 @@ public class Player extends Rectangle {
 	private double YSPEED = 2; // Hastighet i Y-led
 	private double XSPEED = 2; // Hastighet i X-led
 	
-	private boolean lookingRight=false;
+	private boolean lookingRight=true;
 	
 	private final double GRAVITY = 1; // Konstant gravitation
 	private final double JUMPHEIGHT = -10; // Höjden på ett hopp

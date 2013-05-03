@@ -25,12 +25,12 @@ public class Player extends Rectangle {
 
 	private boolean jump = false; // Variabel som säger om player ska hoppa.
 	private double YSPEED = 2; // Hastighet i Y-led
-	private double XSPEED = 2; // Hastighet i X-led
+	private double XSPEED = 5; // Hastighet i X-led
 	
 	private boolean lookingRight=true;
 	
 	private final double GRAVITY = 1; // Konstant gravitation
-	private final double JUMPHEIGHT = -10; // Höjden på ett hopp
+	private final double JUMPHEIGHT = -15; // Höjden på ett hopp
 	
 	private final String PLAYERIMAGE = "player.png";
 	

@@ -178,12 +178,12 @@ public class Player extends Rectangle {
 	}
 
 	public void mouseClicked(MouseEvent m) {
-		System.out.println("Mouse clicked");
 
 	}
 
 	public void mousePressed(MouseEvent m) {
 		// TODO Auto-generated method stub
+		System.out.println("Mouse clicked");
 
 	}
 

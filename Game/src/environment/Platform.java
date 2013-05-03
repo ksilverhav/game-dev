@@ -2,7 +2,6 @@ package environment;
 
 import images.Images;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 

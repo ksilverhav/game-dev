@@ -51,11 +51,19 @@ public class Game implements Runnable {
 	private BufferedImage bi;
 	private int fps = 0;
 	
+	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	GraphicsDevice gd = ge.getDefaultScreenDevice();
+	GraphicsConfiguration gc = gd.getDefaultConfiguration();
+	
 	public static void main(String[] args) {
 		new Game().start();
 	}
-
+	private void loadDisplayModes()
+	{
+		
+	}
 	public Game() {
+		loadDisplayModes();
 		environment.add(new Platform(startpoint.x + 1385, startpoint.y + 200, images));
 		environment.add(new Platform(startpoint.x - 1385, startpoint.y + 300, images));
 		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -300, images)); //Vägg till höger
@@ -119,7 +127,19 @@ public class Game implements Runnable {
 		}
 		this.running = false;
 	}
-
+	private DisplayMode getDisplayMode(){
+		DisplayMode[] dp = gd.getDisplayModes();
+		for(int i =dp.length-1; i !=0; i--){
+			if((dp[i].getWidth()/16)*9 == dp[i].getHeight() && dp[i].getBitDepth() == 32 && dp[i].getRefreshRate() == 60)
+			{
+				
+            System.out.println(dp[i].getWidth() + " " + dp[i].getHeight() + " " + dp[i].getBitDepth() + " " + dp[i].getRefreshRate());
+            return dp[i];
+			}
+        }
+		return new DisplayMode(SCREENWIDTH, SCREENHEIGHT, 32, 60);
+	}
+	
 	@Override
 	/**
 	 * Nedan kommer en funktion som kör gameloopen, anpassat för 60 UPS
@@ -128,16 +148,14 @@ public class Game implements Runnable {
 
 		// Get graphics configuration...
 
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice gd = ge.getDefaultScreenDevice();
-		GraphicsConfiguration gc = gd.getDefaultConfiguration();
+		
 
 		// Change to full screen
 
 		gd.setFullScreenWindow(app);
 
 		if (gd.isDisplayChangeSupported()) {
-			gd.setDisplayMode(new DisplayMode(SCREENWIDTH, SCREENHEIGHT, DisplayMode.BIT_DEPTH_MULTI, DisplayMode.REFRESH_RATE_UNKNOWN));
+			gd.setDisplayMode(getDisplayMode());
 		}
 
 		// Create BackBuffer...

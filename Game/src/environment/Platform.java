@@ -14,7 +14,7 @@ public class Platform extends BaseEnvironment {
 	private final String PLATFORMIMAGE = "platform.png";
 	
 	public Platform(int x, int y, Images images) {
-		super(x, y , 428, 130, images); //Bildens höjd och bredd 
+		super(x, y , 1685, 1080, images); //Bildens höjd och bredd 
 		loadImages(PLATFORMIMAGE, images);
 	}
 	public Rectangle getHitbox(){

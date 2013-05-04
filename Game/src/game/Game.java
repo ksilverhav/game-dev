@@ -58,6 +58,11 @@ public class Game implements Runnable {
 	public Game() {
 		environment.add(new Platform(startpoint.x + 1385, startpoint.y + 200, images));
 		environment.add(new Platform(startpoint.x - 1385, startpoint.y + 300, images));
+		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -300, images)); //Vägg till höger
+		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -600, images)); //Vägg till höger
+		
+		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -200, images)); //Vägg till vänster
+		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -500, images)); //Vägg till vänster
 		environment.add(new Platform(startpoint.x-100, startpoint.y + 100, images));
 		
 

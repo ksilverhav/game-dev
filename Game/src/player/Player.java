@@ -129,7 +129,7 @@ public class Player extends Rectangle {
 			YSPEED = 0; // Sätter hastigheten till noll
 		}
 
-		updateCamera((int) (this.x + (this.getWidth() / 2)), (int) (this.y + (this.getHeight() / 2)));
+		updateCamera((int) this.getCenterX(), (int) this.getCenterY());
 
 	}
 

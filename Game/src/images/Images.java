@@ -52,8 +52,12 @@ public class Images {
 						//Läser in bild och lägger in i array
 						allaBilder.add(ImageIO.read(new File(file.toString())));
 						//Lägger till bildens namn till allBildNamn
-						allaBildNamn.add(file.toString().substring(
-								file.toString().lastIndexOf("\\") + 1));
+						if(file.toString().lastIndexOf("\\") != -1)
+						allaBildNamn.add(file.toString().substring(file.toString().lastIndexOf("\\") + 1));
+						else
+							allaBildNamn.add(file.toString().substring(
+									file.toString().lastIndexOf("/") + 1));
+					
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

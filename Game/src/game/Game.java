@@ -38,7 +38,7 @@ public class Game implements Runnable {
 
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private final int SCREENWIDTH = (int) screenSize.getWidth();
-	private final int SCREENHEIGHT = (int) ((SCREENWIDTH/16)*9);
+	private final int SCREENHEIGHT = (int) ((SCREENWIDTH*9)/16);
 	private final double WIDTHSCALE = (double)SCREENWIDTH / 1920;
 	private final double HEIGHTSCALE = (double)SCREENHEIGHT / 1080;
 	private final Color backgroundColor = new Color(127,224,239);
@@ -137,7 +137,7 @@ public class Game implements Runnable {
 		gd.setFullScreenWindow(app);
 
 		if (gd.isDisplayChangeSupported()) {
-			gd.setDisplayMode(new DisplayMode(SCREENWIDTH, SCREENHEIGHT, 32, 60));
+			gd.setDisplayMode(new DisplayMode(SCREENWIDTH, SCREENHEIGHT, DisplayMode.BIT_DEPTH_MULTI, DisplayMode.REFRESH_RATE_UNKNOWN));
 		}
 
 		// Create BackBuffer...

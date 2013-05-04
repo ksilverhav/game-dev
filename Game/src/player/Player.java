@@ -1,6 +1,7 @@
 package player;
 
 import images.Images;
+import images.SpriteSheet;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -8,6 +9,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import environment.BaseEnvironment;
@@ -36,7 +38,8 @@ public class Player extends Rectangle {
 
 	private final String PLAYERIMAGE = "player.png";
 	private Image im;
-
+	private ArrayList<Image> playerImageArray = new ArrayList<Image>();
+	
 	private Rectangle camera;
 	private int screenWidth;
 	private int screenHeight;
@@ -142,7 +145,11 @@ public class Player extends Rectangle {
 	}
 	
 	private void loadImages(String imagePath, Images images){
+		
 		im = images.getImage(imagePath);
+		playerImageArray = new SpriteSheet().splitSpriteSheet(im, 56, 94);
+		im = playerImageArray.get(0);
+		
 	}
 
 	// Tar hand om knapptryckningar
@@ -188,12 +195,17 @@ public class Player extends Rectangle {
 		// TODO Auto-generated method stub
 
 	}
-
+			//   X
 	public void mouseMoved(MouseEvent m) {
 		if(m.getPoint().x > screenWidth/2)
 			lookingRight = true;
 			else
 			lookingRight = false;
+		if(m.getPoint().y < screenHeight/2)
+		im = playerImageArray.get(0);
+		else 
+		im = playerImageArray.get(1);
+		
 		
 	}
 

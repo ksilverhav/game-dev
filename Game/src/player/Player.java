@@ -150,6 +150,10 @@ public class Player extends Rectangle {
 	}
 	public void render(Graphics2D g) {
 		
+			drawImage(g,sprite.get(PLAYERHAND), 45,65); // Höger hand
+			drawImage(g,sprite.get(PLAYERGUN), 35,60); // Vapen
+			drawImage(g,sprite.get(PLAYERHAND), 5,65); // Vänster hand
+			
 			drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*10),(int)(83  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
 			drawImage(g,sprite.get(PLAYERBODY),5,22);//Kroppen
 			drawImage(g,sprite.get(PLAYERHEAD),0,0);//Huvud
@@ -157,9 +161,6 @@ public class Player extends Rectangle {
 			drawImage(g,sprite.get(PLAYEREYE), 35 + eyeXoffset,18 + eyeYoffset); // höger öga
 			drawImage(g,sprite.get(PLAYEREYE), 20 + eyeXoffset,18 + eyeYoffset); // Vänster öga
 
-			drawImage(g,sprite.get(PLAYERHAND), 45,65); // Höger hand
-			drawImage(g,sprite.get(PLAYERGUN), 8,60); // Vapen
-			drawImage(g,sprite.get(PLAYERHAND), 5,65); // Vänster hand
 			
 			
 			

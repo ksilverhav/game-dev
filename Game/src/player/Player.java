@@ -41,6 +41,8 @@ public class Player extends Rectangle {
 	private double footMovement = -1;
 	private double footSpeed = 0.17;
 	
+	private double theta=0; //Vinkeln mellan spelare och mus 
+	
 	private final int PLAYERBODY = 0, PLAYERHEAD = 1, PLAYEREYE = 2, PLAYERHAND = 3, PLAYERFOOT = 4
 			, PLAYERGUN = 5;
 	private int eyeXoffset = 0,eyeYoffset = 0;
@@ -151,7 +153,13 @@ public class Player extends Rectangle {
 	public void render(Graphics2D g) {
 		
 			drawImage(g,sprite.get(PLAYERHAND), 45,65); // Höger hand
-			drawImage(g,sprite.get(PLAYERGUN), 35,60); // Vapen
+			AffineTransform trans = g.getTransform();
+			
+			trans.rotate(theta-(Math.PI/2.0),x+width/2,y+height/2); //Offset för att rota kring mitten
+			g.setTransform(trans);
+			drawImage(g,sprite.get(PLAYERGUN), width/2,height/2); // Vapen
+			trans.rotate(-(theta-Math.PI/2.0),x+width/2,y+height/2); //Offset för att rota kring mitten
+			g.setTransform(trans);
 			drawImage(g,sprite.get(PLAYERHAND), 5,65); // Vänster hand
 			
 			drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*10),(int)(83  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
@@ -162,7 +170,7 @@ public class Player extends Rectangle {
 			drawImage(g,sprite.get(PLAYEREYE), 20 + eyeXoffset,18 + eyeYoffset); // Vänster öga
 
 			
-			
+
 			
 			drawImage(g,sprite.get(PLAYERFOOT), (int)(21 + X_DIRECTION*Math.cos(footMovement)*10),(int)(83 + Math.sin(Math.abs(X_DIRECTION)*footMovement+Math.PI)*3)); // Vänster fot
 			
@@ -229,7 +237,7 @@ public class Player extends Rectangle {
 	}
 			//   X
 	public void mouseMoved(MouseEvent m) {
-		 double theta = Math.atan2(m.getPoint().y - screenHeight/2, m.getPoint().x - screenWidth/2); //Tar ut vinkeln mellan mus och mitten av skärmen
+			theta = Math.atan2(m.getPoint().y - screenHeight/2, m.getPoint().x - screenWidth/2); //Tar ut vinkeln mellan mus och mitten av skärmen
 		    theta += Math.PI/2.0;  // Gör om vinkel så 0 grader är norr ut
 		    eyeXoffset = (int) Math.round(Math.sin(theta)); 
 		    eyeYoffset = -(int) Math.round(Math.cos(theta));

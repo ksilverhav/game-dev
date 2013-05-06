@@ -150,7 +150,7 @@ public class Player extends Rectangle {
 	}
 	public void render(Graphics2D g) {
 		
-		drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*5),(int)(83  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
+		drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*10),(int)(83  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
 			drawImage(g,sprite.get(PLAYERBODY),5,22);//Kroppen
 			drawImage(g,sprite.get(PLAYERHEAD),0,0);//Huvud
 
@@ -163,7 +163,7 @@ public class Player extends Rectangle {
 			
 			
 			
-			drawImage(g,sprite.get(PLAYERFOOT), (int)(21 + X_DIRECTION*Math.cos(footMovement)*5),(int)(83 + Math.sin(Math.abs(X_DIRECTION)*footMovement+Math.PI)*3)); // Vänster fot
+			drawImage(g,sprite.get(PLAYERFOOT), (int)(21 + X_DIRECTION*Math.cos(footMovement)*10),(int)(83 + Math.sin(Math.abs(X_DIRECTION)*footMovement+Math.PI)*3)); // Vänster fot
 			
 			footMovement += footSpeed;
 			if (footMovement >=1)

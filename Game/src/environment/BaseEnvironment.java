@@ -1,7 +1,5 @@
 package environment;
 
-import images.Images;
-
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -13,9 +11,8 @@ public abstract class BaseEnvironment extends Rectangle {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected Image im;
 	
-	public BaseEnvironment(int x, int y, int width, int height, Images images){
+	public BaseEnvironment(int x, int y, int width, int height){
 		this.setBounds(x, y, width, height);
 		
 	}
@@ -24,11 +21,8 @@ public abstract class BaseEnvironment extends Rectangle {
 		return this;
 	}
 	
-	protected void loadImages(String imagePath, Images images){
-		im = images.getImage(imagePath);
-	}
 	
-	public abstract void render(Graphics2D g, Images images);
+	public abstract void render(Graphics2D g, Image image);
 	
 	protected abstract int damager();
 	

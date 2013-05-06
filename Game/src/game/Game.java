@@ -7,6 +7,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -23,8 +24,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.swing.JFrame;
 
 import player.Player;
 import environment.BaseEnvironment;
@@ -45,7 +44,7 @@ public class Game implements Runnable {
 	private List<BaseEnvironment> environment = Collections.synchronizedList(new ArrayList<BaseEnvironment>());
 	private Images images = new Images();	//Laddar in alla bilder
 	private Player player = new Player(SCREENWIDTH, SCREENHEIGHT, images);
-	private JFrame app = new JFrame();
+	private Frame app = new Frame();
 	public boolean running = false;
 	private final Point startpoint = new Point(2000,2000);
 	private BufferedImage bi;
@@ -64,14 +63,14 @@ public class Game implements Runnable {
 	}
 	public Game() {
 		loadDisplayModes();
-		environment.add(new Platform(startpoint.x + 1385, startpoint.y + 200, images));
-		environment.add(new Platform(startpoint.x - 1385, startpoint.y + 300, images));
-		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -300, images)); //Vägg till höger
-		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -600, images)); //Vägg till höger
+		environment.add(new Platform(startpoint.x + 1385, startpoint.y + 200));
+		environment.add(new Platform(startpoint.x - 1385, startpoint.y + 300));
+		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -300)); //Vägg till höger
+		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -600)); //Vägg till höger
 		
-		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -200, images)); //Vägg till vänster
-		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -500, images)); //Vägg till vänster
-		environment.add(new Platform(startpoint.x-100, startpoint.y + 100, images));
+		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -200)); //Vägg till vänster
+		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -500)); //Vägg till vänster
+		environment.add(new Platform(startpoint.x-100, startpoint.y + 100));
 		
 
 		
@@ -167,7 +166,6 @@ public class Game implements Runnable {
 
 		// Objects needed for rendering...
 		Graphics graphics = null;
-		Graphics2D g2d = null;
 
 		// Variables for counting frames per seconds
 		int ups = 0;
@@ -204,7 +202,7 @@ public class Game implements Runnable {
 
 				// draw some rectangles...
 
-				render(g2d);
+				
 
 				if (ups <= 100) {
 					update();
@@ -220,7 +218,7 @@ public class Game implements Runnable {
 
 				graphics = buffer.getDrawGraphics();
 				graphics.drawImage(bi, 0, 0, null);
-
+				render((Graphics2D) graphics);
 				if (!buffer.contentsLost())
 					buffer.show();
 
@@ -240,11 +238,9 @@ public class Game implements Runnable {
 
 	public void update() {
 		player.move(environment);
-
 	}
 
 	public void render(Graphics2D g2d) {
-		g2d = bi.createGraphics();
 
 		g2d.scale(WIDTHSCALE, HEIGHTSCALE);
 		
@@ -259,13 +255,12 @@ public class Game implements Runnable {
 
 		// Det som ritas ut relaterar till kamerans position
 		g2d.translate(-player.getCamera().x, -player.getCamera().y);
-
 		
 
 		for (int i = 0; i < environment.size(); i++) {
 			if (environment.get(i).intersects(player.getCamera())) {
 				// Ritar ut miljö
-				environment.get(i).render(g2d,images);
+				environment.get(i).render(g2d,images.getImage("platform.png"));
 			}
 		}
 		

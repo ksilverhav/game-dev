@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +38,11 @@ public class Player extends Rectangle {
 
 	private final String PLAYERIMAGE = "player.png";
 	private Image im;
+	private double footMovement = -1;
+	private double footSpeed = 0.17;
 	
-	private final int PLAYERBODY = 0, PLAYERHEAD = 1, PLAYEREYE = 2, PLAYERHAND = 3, PLAYERFOOT = 4;
+	private final int PLAYERBODY = 0, PLAYERHEAD = 1, PLAYEREYE = 2, PLAYERHAND = 3, PLAYERFOOT = 4
+			, PLAYERGUN = 5;
 	private int eyeXoffset = 0,eyeYoffset = 0;
 	
 	private SpriteSheet spriteSheet = new SpriteSheet();
@@ -142,23 +146,28 @@ public class Player extends Rectangle {
 	// Ritar ut spelaren
 	private void drawImage(Graphics2D g,Image img, int xOffset, int yOffset)
 	{
-		
 			g.drawImage(img, x+xOffset, y+yOffset, img.getWidth(null), img.getHeight(null), null); // left eye
 	}
 	public void render(Graphics2D g) {
+		
+		drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*5),(int)(83  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
 			drawImage(g,sprite.get(PLAYERBODY),5,22);//Kroppen
 			drawImage(g,sprite.get(PLAYERHEAD),0,0);//Huvud
 
-				drawImage(g,sprite.get(PLAYEREYE), 35 + eyeXoffset,18 + eyeYoffset); // höger öga
-				drawImage(g,sprite.get(PLAYEREYE), 20 + eyeXoffset,18 + eyeYoffset); // Vänster öga
-
-
+			drawImage(g,sprite.get(PLAYEREYE), 35 + eyeXoffset,18 + eyeYoffset); // höger öga
+			drawImage(g,sprite.get(PLAYEREYE), 20 + eyeXoffset,18 + eyeYoffset); // Vänster öga
 
 			drawImage(g,sprite.get(PLAYERHAND), 45,65); // Höger hand
+			drawImage(g,sprite.get(PLAYERGUN), 8,60); // Vapen
 			drawImage(g,sprite.get(PLAYERHAND), 5,65); // Vänster hand
-			drawImage(g,sprite.get(PLAYERFOOT), 3,85); // vänster fot
-			drawImage(g,sprite.get(PLAYERFOOT), 36,85); // höger fot
-
+			
+			
+			
+			drawImage(g,sprite.get(PLAYERFOOT), (int)(21 + X_DIRECTION*Math.cos(footMovement)*5),(int)(83 + Math.sin(Math.abs(X_DIRECTION)*footMovement+Math.PI)*3)); // Vänster fot
+			
+			footMovement += footSpeed;
+			if (footMovement >=1)
+				footSpeed*=-1;
 	}
 	
 	private void loadImages(String imagePath, Images images){
@@ -169,7 +178,7 @@ public class Player extends Rectangle {
 		sprite.add(spriteSheet.splitSpriteSheet(im,64,16, 5, 10)); //Laddar in öga
 		sprite.add(spriteSheet.splitSpriteSheet(im,64,32, 11, 10)); //Laddar in hand
 		sprite.add(spriteSheet.splitSpriteSheet(im,64,8, 21, 7)); //Laddar in fot
-		
+		sprite.add(spriteSheet.splitSpriteSheet(im,64,48, 61, 21)); //Laddar in vapen
 		
 		
 	}

@@ -29,12 +29,12 @@ public class Player extends Rectangle {
 
 	private boolean jump = false; // Variabel som säger om player ska hoppa.
 	private double YSPEED = 2; // Hastighet i Y-led
-	private double XSPEED = 5; // Hastighet i X-led
+	private double XSPEED = 8; // Hastighet i X-led
 	
 	private final Point startPoint = new Point(2000,2000);
 	
 	private final double GRAVITY = 1; // Konstant gravitation
-	private final double JUMPHEIGHT = -15; // Höjden på ett hopp
+	private final double JUMPHEIGHT = -20; // Höjden på ett hopp
 
 	private final String PLAYERIMAGE = "player.png";
 	private Image im;
@@ -150,7 +150,7 @@ public class Player extends Rectangle {
 	}
 	public void render(Graphics2D g) {
 		
-		drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*10),(int)(83  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
+			drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*10),(int)(83  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
 			drawImage(g,sprite.get(PLAYERBODY),5,22);//Kroppen
 			drawImage(g,sprite.get(PLAYERHEAD),0,0);//Huvud
 

@@ -32,13 +32,18 @@ public class Player extends Rectangle {
 	
 	private final Point startPoint = new Point(2000,2000);
 	
-	private boolean lookingRight=true;
 	private final double GRAVITY = 1; // Konstant gravitation
 	private final double JUMPHEIGHT = -15; // Höjden på ett hopp
 
 	private final String PLAYERIMAGE = "player.png";
 	private Image im;
-	private ArrayList<Image> playerImageArray = new ArrayList<Image>();
+	
+	private final int PLAYERBODY = 0, PLAYERHEAD = 1, PLAYEREYE = 2, PLAYERHAND = 3, PLAYERFOOT = 4;
+	private int eyeXoffset = 0,eyeYoffset = 0;
+	
+	private SpriteSheet spriteSheet = new SpriteSheet();
+	
+	private ArrayList<Image> sprite = new ArrayList<Image>();
 	
 	private Rectangle camera;
 	private int screenWidth;
@@ -47,11 +52,12 @@ public class Player extends Rectangle {
 	public Player(int screenWidth, int screenHeight, Images images) {
 		x = startPoint.x;
 		y = startPoint.y;
-		width = 56;
+		width = 62;
 		height = 94;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		camera = new Rectangle(screenWidth, screenHeight);
+		
 		loadImages(PLAYERIMAGE, images);
 	}
 
@@ -134,21 +140,37 @@ public class Player extends Rectangle {
 	}
 
 	// Ritar ut spelaren
-
+	private void drawImage(Graphics2D g,Image img, int xOffset, int yOffset)
+	{
+		
+			g.drawImage(img, x+xOffset, y+yOffset, img.getWidth(null), img.getHeight(null), null); // left eye
+	}
 	public void render(Graphics2D g) {
+			drawImage(g,sprite.get(PLAYERBODY),5,22);//Kroppen
+			drawImage(g,sprite.get(PLAYERHEAD),0,0);//Huvud
 
-		if (lookingRight) {
-			g.drawImage(im, x + im.getWidth(null), y, x, y + im.getHeight(null), 0, 0, im.getWidth(null),
-					im.getHeight(null), null);
-		} else
-			g.drawImage(im, x, y, width, height, null);
+				drawImage(g,sprite.get(PLAYEREYE), 35 + eyeXoffset,18 + eyeYoffset); // höger öga
+				drawImage(g,sprite.get(PLAYEREYE), 20 + eyeXoffset,18 + eyeYoffset); // Vänster öga
+
+
+
+			drawImage(g,sprite.get(PLAYERHAND), 45,65); // Höger hand
+			drawImage(g,sprite.get(PLAYERHAND), 5,65); // Vänster hand
+			drawImage(g,sprite.get(PLAYERFOOT), 3,85); // vänster fot
+			drawImage(g,sprite.get(PLAYERFOOT), 36,85); // höger fot
+
 	}
 	
 	private void loadImages(String imagePath, Images images){
 		
 		im = images.getImage(imagePath);
-		playerImageArray = new SpriteSheet().splitSpriteSheet(im, 56, 94);
-		im = playerImageArray.get(0);
+		sprite.add(spriteSheet.splitSpriteSheet(im,0,59, 49, 66)); //Laddar in kropp
+		sprite.add(spriteSheet.splitSpriteSheet(im,0,0, 62, 57)); //Laddar in huvud
+		sprite.add(spriteSheet.splitSpriteSheet(im,64,16, 5, 10)); //Laddar in öga
+		sprite.add(spriteSheet.splitSpriteSheet(im,64,32, 11, 10)); //Laddar in hand
+		sprite.add(spriteSheet.splitSpriteSheet(im,64,8, 21, 7)); //Laddar in fot
+		
+		
 		
 	}
 
@@ -197,15 +219,11 @@ public class Player extends Rectangle {
 	}
 			//   X
 	public void mouseMoved(MouseEvent m) {
-		if(m.getPoint().x > screenWidth/2)
-			lookingRight = true;
-			else
-			lookingRight = false;
-		if(m.getPoint().y < screenHeight/2)
-		im = playerImageArray.get(0);
-		else 
-		im = playerImageArray.get(1);
-		
+		 double theta = Math.atan2(m.getPoint().y - screenHeight/2, m.getPoint().x - screenWidth/2); //Tar ut vinkeln mellan mus och mitten av skärmen
+		    theta += Math.PI/2.0;  // Gör om vinkel så 0 grader är norr ut
+		    eyeXoffset = (int) Math.round(Math.sin(theta)); 
+		    eyeYoffset = -(int) Math.round(Math.cos(theta));
+
 		
 	}
 

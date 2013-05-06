@@ -10,10 +10,11 @@ public class Platform extends BaseEnvironment {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Rectangle hitbox = new Rectangle(x,y+5,width,height-5);
+	private Rectangle hitbox;
 	
 	public Platform(int x, int y) {
 		super(x, y , 1685, 1080); //Bildens höjd och bredd 
+		hitbox = new Rectangle(x,y+5,width,height-5);
 	}
 	public Rectangle getHitbox(){
 		return hitbox;// offset så att spelaren kan gå "i" plattformen

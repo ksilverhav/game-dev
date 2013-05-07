@@ -152,15 +152,9 @@ public class Player extends Rectangle {
 	}
 	public void render(Graphics2D g) {
 		
-			drawImage(g,sprite.get(PLAYERHAND), 45,65); // Höger hand
-			AffineTransform trans = g.getTransform();
-			double angle = theta-(Math.PI/2.0); // Utifall att vinkeln hinner ändras innan programmet roterat tillbaka
-			trans.rotate(angle,x+width/2,y+height/2); //Offset för att rota kring mitten
-			g.setTransform(trans);
-			drawImage(g,sprite.get(PLAYERGUN), width/2,height/2); // Vapen
-			trans.rotate(-angle,x+width/2,y+height/2); //Offset för att rota kring mitten
-			g.setTransform(trans);
-			drawImage(g,sprite.get(PLAYERHAND), 5,65); // Vänster hand
+			
+			
+			
 			
 			drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*10),(int)(88  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
 			drawImage(g,sprite.get(PLAYERBODY),16,27);//Kroppen
@@ -168,8 +162,16 @@ public class Player extends Rectangle {
 
 			drawImage(g,sprite.get(PLAYEREYE), 35 + eyeXoffset,18 + eyeYoffset); // höger öga
 			drawImage(g,sprite.get(PLAYEREYE), 20 + eyeXoffset,18 + eyeYoffset); // Vänster öga
-
 			
+			AffineTransform trans = g.getTransform();
+			double angle = theta-(Math.PI/2.0); // Utifall att vinkeln hinner ändras innan programmet roterat tillbaka
+			trans.rotate(angle,x+width/2-5,y+height/2+20); //Offset för att rota kring mitten
+			g.setTransform(trans);
+			drawImage(g,sprite.get(PLAYERHAND), 50,73); // Höger hand
+			drawImage(g,sprite.get(PLAYERGUN), width/2-5,height/2+20); // Vapen
+			drawImage(g,sprite.get(PLAYERHAND), 25,70); // Vänster hand
+			trans.rotate(-angle,x+width/2-5,y+height/2+20); //Offset för att rota kring mitten
+			g.setTransform(trans);			
 
 			
 			drawImage(g,sprite.get(PLAYERFOOT), (int)(21 + X_DIRECTION*Math.cos(footMovement)*10),(int)(88 + Math.sin(Math.abs(X_DIRECTION)*footMovement+Math.PI)*3)); // Vänster fot
@@ -237,7 +239,7 @@ public class Player extends Rectangle {
 	}
 			//   X
 	public void mouseMoved(MouseEvent m) {
-			theta = Math.atan2(m.getPoint().y - screenHeight/2, m.getPoint().x - screenWidth/2); //Tar ut vinkeln mellan mus och mitten av skärmen
+			theta = Math.atan2(m.getPoint().y - screenHeight/2-20, m.getPoint().x - screenWidth/2+5); //Tar ut vinkeln mellan mus och mitten av skärmen
 		    theta += Math.PI/2.0;  // Gör om vinkel så 0 grader är norr ut
 		    eyeXoffset = (int) Math.round(Math.sin(theta)); 
 		    eyeYoffset = -(int) Math.round(Math.cos(theta));

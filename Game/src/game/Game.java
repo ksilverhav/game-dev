@@ -49,17 +49,17 @@ public class Game implements Runnable {
 	private final Point startpoint = new Point(2000,2000);
 	private BufferedImage bi;
 	private int fps = 0;
-	
+
 	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	GraphicsDevice gd = ge.getDefaultScreenDevice();
 	GraphicsConfiguration gc = gd.getDefaultConfiguration();
-	
+
 	public static void main(String[] args) {
 		new Game().start();
 	}
 	private void loadDisplayModes()
 	{
-		
+
 	}
 	public Game() {
 		loadDisplayModes();
@@ -67,12 +67,12 @@ public class Game implements Runnable {
 		environment.add(new Platform(startpoint.x - 1385, startpoint.y + 300));
 		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -300)); //Vägg till höger
 		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -600)); //Vägg till höger
-		
+
 		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -200)); //Vägg till vänster
 		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -500)); //Vägg till vänster
 		environment.add(new Platform(startpoint.x-100, startpoint.y + 100));
 
-		
+
 		app.setIgnoreRepaint(true);
 
 		app.setUndecorated(true);
@@ -130,14 +130,14 @@ public class Game implements Runnable {
 		for(int i =dp.length-1; i !=0; i--){
 			if((dp[i].getWidth()/16)*9 == dp[i].getHeight() && dp[i].getBitDepth() == 32 && dp[i].getRefreshRate() == 60)
 			{
-				
+
             System.out.println(dp[i].getWidth() + " " + dp[i].getHeight() + " " + dp[i].getBitDepth() + " " + dp[i].getRefreshRate());
             return dp[i];
 			}
         }
 		return new DisplayMode(SCREENWIDTH, SCREENHEIGHT, 32, 60);
 	}
-	
+
 	@Override
 	/**
 	 * Nedan kommer en funktion som kör gameloopen, anpassat för 60 UPS
@@ -146,7 +146,7 @@ public class Game implements Runnable {
 
 		// Get graphics configuration...
 
-		
+
 
 		// Change to full screen
 
@@ -201,7 +201,7 @@ public class Game implements Runnable {
 
 				// draw some rectangles...
 
-				
+
 
 				if (ups <= 100) {
 					update();
@@ -242,7 +242,7 @@ public class Game implements Runnable {
 	public void render(Graphics2D g2d) {
 
 		g2d.scale(WIDTHSCALE, HEIGHTSCALE);
-		
+
 		// draw background
 		g2d.setColor(backgroundColor);
 		g2d.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
@@ -254,7 +254,7 @@ public class Game implements Runnable {
 
 		// Det som ritas ut relaterar till kamerans position
 		g2d.translate(-player.getCamera().x, -player.getCamera().y);
-		
+
 
 		for (int i = 0; i < environment.size(); i++) {
 			if (environment.get(i).intersects(player.getCamera())) {
@@ -262,9 +262,9 @@ public class Game implements Runnable {
 				environment.get(i).render(g2d,images.getImage("platform.png"));
 			}
 		}
-		
+
 		player.render(g2d); // Ritar ut spelare
-		
+
 		g2d.dispose();
 	}
 

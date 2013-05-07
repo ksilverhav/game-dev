@@ -154,16 +154,16 @@ public class Player extends Rectangle {
 		
 			drawImage(g,sprite.get(PLAYERHAND), 45,65); // Höger hand
 			AffineTransform trans = g.getTransform();
-			
-			trans.rotate(theta-(Math.PI/2.0),x+width/2,y+height/2); //Offset för att rota kring mitten
+			double angle = theta-(Math.PI/2.0); // Utifall att vinkeln hinner ändras innan programmet roterat tillbaka
+			trans.rotate(angle,x+width/2,y+height/2); //Offset för att rota kring mitten
 			g.setTransform(trans);
 			drawImage(g,sprite.get(PLAYERGUN), width/2,height/2); // Vapen
-			trans.rotate(-(theta-Math.PI/2.0),x+width/2,y+height/2); //Offset för att rota kring mitten
+			trans.rotate(-angle,x+width/2,y+height/2); //Offset för att rota kring mitten
 			g.setTransform(trans);
 			drawImage(g,sprite.get(PLAYERHAND), 5,65); // Vänster hand
 			
-			drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*10),(int)(83  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
-			drawImage(g,sprite.get(PLAYERBODY),5,22);//Kroppen
+			drawImage(g,sprite.get(PLAYERFOOT), (int)(18 + -X_DIRECTION*Math.cos(footMovement)*10),(int)(88  + Math.sin(Math.abs(X_DIRECTION)*footMovement)*3)); // höger fot
+			drawImage(g,sprite.get(PLAYERBODY),16,27);//Kroppen
 			drawImage(g,sprite.get(PLAYERHEAD),0,0);//Huvud
 
 			drawImage(g,sprite.get(PLAYEREYE), 35 + eyeXoffset,18 + eyeYoffset); // höger öga
@@ -172,7 +172,7 @@ public class Player extends Rectangle {
 			
 
 			
-			drawImage(g,sprite.get(PLAYERFOOT), (int)(21 + X_DIRECTION*Math.cos(footMovement)*10),(int)(83 + Math.sin(Math.abs(X_DIRECTION)*footMovement+Math.PI)*3)); // Vänster fot
+			drawImage(g,sprite.get(PLAYERFOOT), (int)(21 + X_DIRECTION*Math.cos(footMovement)*10),(int)(88 + Math.sin(Math.abs(X_DIRECTION)*footMovement+Math.PI)*3)); // Vänster fot
 			
 			footMovement += footSpeed;
 			if (footMovement >=1)
@@ -182,10 +182,10 @@ public class Player extends Rectangle {
 	private void loadImages(String imagePath, Images images){
 		
 		im = images.getImage(imagePath);
-		sprite.add(spriteSheet.splitSpriteSheet(im,0,59, 49, 66)); //Laddar in kropp
+		sprite.add(spriteSheet.splitSpriteSheet(im,0,59, 29, 64)); //Laddar in kropp
 		sprite.add(spriteSheet.splitSpriteSheet(im,0,0, 62, 57)); //Laddar in huvud
 		sprite.add(spriteSheet.splitSpriteSheet(im,64,16, 5, 10)); //Laddar in öga
-		sprite.add(spriteSheet.splitSpriteSheet(im,64,32, 11, 10)); //Laddar in hand
+		sprite.add(spriteSheet.splitSpriteSheet(im,64,32, 11, 11)); //Laddar in hand
 		sprite.add(spriteSheet.splitSpriteSheet(im,64,8, 21, 7)); //Laddar in fot
 		sprite.add(spriteSheet.splitSpriteSheet(im,64,48, 61, 21)); //Laddar in vapen
 		

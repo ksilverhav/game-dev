@@ -101,19 +101,19 @@ public class Player extends Rectangle {
 
 				// Flyttar spelaren till sista pixeln som inte spelaren krockar
 				// med ett föremål
-				for (int dy = 0; dy < (int) (YSPEED); dy++) {
-					y += 1;
+				for (int dy = 0; dy != (int) (YSPEED); dy+=YSPEED/(Math.abs(YSPEED))) {
+					y += YSPEED/(Math.abs(YSPEED));
 					if (intersects(environment.get(i))) {
 						yIntersected = true;
-						y -= 1;
-						YSPEED = 0;
+						y -= YSPEED/(Math.abs(YSPEED));
+
 
 						break;
 					}
 
 				}
 
-				if (yIntersected) {
+				if (yIntersected && YSPEED>0) {
 					Y_DIRECTION = 0; // detta tillåter hopp.
 
 				}
@@ -132,7 +132,7 @@ public class Player extends Rectangle {
 				}
 			}
 		}
-
+		if(!yIntersected)
 		y += YSPEED; // Ökar position i Y-led
 		if (!xIntersected)
 			x += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är

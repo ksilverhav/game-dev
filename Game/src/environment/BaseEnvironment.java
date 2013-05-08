@@ -11,7 +11,7 @@ public abstract class BaseEnvironment extends Rectangle {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	
+	String imageName = "";
 	public BaseEnvironment(int x, int y, int width, int height){
 		this.setBounds(x, y, width, height);
 		
@@ -20,7 +20,9 @@ public abstract class BaseEnvironment extends Rectangle {
 	public Rectangle getHitbox(){
 		return this;
 	}
-	
+	public String getImageName(){
+		return imageName;
+	}
 	
 	public abstract void render(Graphics2D g, Image image);
 	

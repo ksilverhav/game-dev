@@ -63,14 +63,15 @@ public class Game implements Runnable {
 	}
 	public Game() {
 		loadDisplayModes();
-		environment.add(new Platform(startpoint.x + 1385, startpoint.y + 200));
+		environment.add(new Platform(startpoint.x + 1385, startpoint.y + 200));		
 		environment.add(new Platform(startpoint.x - 1385, startpoint.y + 300));
 		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -300)); //Vägg till höger
 		environment.add(new Platform(startpoint.x + 1385*2, startpoint.y -600)); //Vägg till höger
 
 		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -200)); //Vägg till vänster
 		environment.add(new Platform(startpoint.x - 1385*2, startpoint.y -500)); //Vägg till vänster
-		environment.add(new Platform(startpoint.x-100, startpoint.y + 100));
+		environment.add(new Platform(startpoint.x-100, startpoint.y -1200));
+		environment.add(new Platform(startpoint.x-100, startpoint.y + 100)); //Testtak
 
 
 		app.setIgnoreRepaint(true);
@@ -259,7 +260,7 @@ public class Game implements Runnable {
 		for (int i = 0; i < environment.size(); i++) {
 			if (environment.get(i).intersects(player.getCamera())) {
 				// Ritar ut miljö
-				environment.get(i).render(g2d,images.getImage("platform.png"));
+				environment.get(i).render(g2d,images.getImage(environment.get(i).getImageName()));
 			}
 		}
 

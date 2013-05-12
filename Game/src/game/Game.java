@@ -100,6 +100,9 @@ public class Game implements Runnable {
 			public void mouseMoved(MouseEvent me) {
 			    player.mouseMoved(me);
 			  }
+			public void mouseDragged(MouseEvent me) {
+			    player.mouseMoved(me);
+			  }
 		});
 		app.addMouseListener(new MouseAdapter() {
 

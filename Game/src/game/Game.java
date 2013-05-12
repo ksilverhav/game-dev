@@ -14,6 +14,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -50,6 +51,8 @@ public class Game implements Runnable {
 	private BufferedImage bi;
 	private int fps = 0;
 
+	boolean firstRender = true;
+	
 	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	GraphicsDevice gd = ge.getDefaultScreenDevice();
 	GraphicsConfiguration gc = gd.getDefaultConfiguration();
@@ -175,7 +178,7 @@ public class Game implements Runnable {
 		long curTime = System.currentTimeMillis();
 		long lastTime = curTime;
 		long currentTime = System.currentTimeMillis();
-
+		
 		while (running) {
 
 			try {
@@ -241,7 +244,12 @@ public class Game implements Runnable {
 	}
 
 	public void render(Graphics2D g2d) {
-
+		if(firstRender)
+		{
+		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		//firstRender=false;
+		}
 		g2d.scale(WIDTHSCALE, HEIGHTSCALE);
 
 		// draw background

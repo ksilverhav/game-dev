@@ -94,26 +94,21 @@ public class Player extends Rectangle {
 								// gravitation
 		if (YSPEED > 20)
 			YSPEED = 20;
-
+		y+=YSPEED;
 		for (int i = 0; i < environment.size(); i++) { // Loopar igenom all
 														// environment
-			if ((new Rectangle(x, y + (int) YSPEED, width, height)).intersects(environment.get(i).getHitbox())) {
-
-				// Flyttar spelaren till sista pixeln som inte spelaren krockar
-				// med ett föremål
-				for (int dy = 0; dy != (int) (YSPEED); dy+=YSPEED/(Math.abs(YSPEED))) {
-					y += YSPEED/(Math.abs(YSPEED));
-					if (intersects(environment.get(i))) {
-						yIntersected = true;
-						y -= YSPEED/(Math.abs(YSPEED));
-
-
-						break;
-					}
-
+			
+			if(this.intersects(environment.get(i).getHitbox()))
+			{
+				yIntersected=true;
+				while(this.intersects(environment.get(i).getHitbox()))
+				{
+					y-=YSPEED/(Math.abs(YSPEED));
+					
 				}
+	
 
-				if (yIntersected && YSPEED>0) {
+				if (YSPEED>0) {
 					Y_DIRECTION = 0; // detta tillåter hopp.
 
 				}
@@ -132,8 +127,7 @@ public class Player extends Rectangle {
 				}
 			}
 		}
-		if(!yIntersected)
-		y += YSPEED; // Ökar position i Y-led
+
 		if (!xIntersected)
 			x += X_DIRECTION * XSPEED; // Förflyttar i X-led om knapp är
 										// nedtryckt
@@ -166,22 +160,30 @@ public class Player extends Rectangle {
 
 			drawImage(g,sprite.get(PLAYEREYE), 35 + eyeXoffset,18 + eyeYoffset); // höger öga
 			drawImage(g,sprite.get(PLAYEREYE), 20 + eyeXoffset,18 + eyeYoffset); // Vänster öga
-			
+		
 			drawImage(g,sprite.get(PLAYERFOOT), (int)(21 + X_DIRECTION*Math.cos(footMovement)*10),(int)(88 + Math.sin(Math.abs(X_DIRECTION)*footMovement+Math.PI)*3)); // Vänster fot
 			
 			AffineTransform trans = g.getTransform();
 			double angle = theta-(Math.PI/2.0); // Utifall att vinkeln hinner ändras innan programmet roterat tillbaka
 			trans.rotate(angle,x+width/2-5,y+height/2+20); //Offset för att rota kring mitten
 			g.setTransform(trans);
-			drawImage(g,sprite.get(PLAYERHAND), 50,73); // Höger hand
+			
 			
 			
 			if(lookingRight)
+			{
+				drawImage(g,sprite.get(PLAYERHAND), 50,73); // Höger hand
 				drawImage(g,sprite.get(PLAYERGUN), 2*width/2-35,height/2+20); // Vapen
+				drawImage(g,sprite.get(PLAYERHAND), 25,73); // Vänster hand
+			}
 			else
-				drawMirroredImage(g,sprite.get(PLAYERGUN), 2*width/2-35,height/2+15); // Vapen
+			{
+				drawImage(g,sprite.get(PLAYERHAND), 39,50); // Höger hand
+				drawMirroredImage(g,sprite.get(PLAYERGUN), 2*width/2-45,height/2-1); // Vapen
+				drawImage(g,sprite.get(PLAYERHAND), 15,50); // Vänster hand
+			}
 
-			drawImage(g,sprite.get(PLAYERHAND), 25,70); // Vänster hand
+			
 			trans.rotate(-angle,x+width/2-5,y+height/2+20); //Offset för att rota kring mitten
 			g.setTransform(trans);			
 
@@ -240,13 +242,11 @@ public class Player extends Rectangle {
 	}
 
 	public void mousePressed(MouseEvent m) {
-		// TODO Auto-generated method stub
-		System.out.println("Mouse clicked");
+
 
 	}
 
 	public void mouseReleased(MouseEvent m) {
-		// TODO Auto-generated method stub
 
 	}
 			//   X
